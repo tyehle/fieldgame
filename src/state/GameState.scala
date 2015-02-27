@@ -1,6 +1,7 @@
 package state
 
 import collection.mutable.ListBuffer
+import scala.collection.mutable
 
 /**
  * This is just a container for all of the things in the game. This is the
@@ -9,8 +10,7 @@ import collection.mutable.ListBuffer
  * Created by Tobin on 4/4/2014.
  */
 object GameState {
-  var blocks:ListBuffer[Block] = ListBuffer()
+  var blocks:mutable.Seq[Block] = ListBuffer.empty[Block]
   var player = Player
-  var camera = Camera
 }
 

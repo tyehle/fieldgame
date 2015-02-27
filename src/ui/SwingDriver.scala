@@ -1,8 +1,11 @@
 package ui
 
 import java.awt._
+import java.awt.event.{KeyEvent, KeyListener}
 import javax.swing._
 import state._
+
+import scala.util.Random
 
 /**
  *
@@ -10,12 +13,16 @@ import state._
  */
 
 object SwingDriver extends JFrame {
-  val speed = 10
-  var direction = new Vector3(speed,speed,0)
+  val speed = 1
 
   def main(args: Array[String]) = {
-    GameState.blocks += new Block(new Vector3(100,100,100),
-      new Vector3(100,100,100))
+//    GameState.blocks +:= new Block(new Vector3(100,100,100),
+//                                   new Vector3(100,100,100))
+
+    0 to 100 foreach {_ => GameState.blocks +:= new Block(new Vector3(0,0,0),
+                                                          new Vector3(Random.nextInt(200) - 100,
+                                                                      Random.nextInt(200) - 100,
+                                                                      Random.nextInt(200) - 100))}
 
     val device = GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice
     setUndecorated(true)
@@ -33,6 +40,23 @@ object SwingDriver extends JFrame {
 
     setVisible(true)
 
+    addKeyListener(new KeyListener {
+      override def keyTyped(e: KeyEvent): Unit = {}
+
+      override def keyPressed(e: KeyEvent): Unit = {
+        val angle = math.Pi / 36.0
+        e.getKeyCode match {
+          case KeyEvent.VK_W => Player.pitch(-angle)
+          case KeyEvent.VK_S => Player.pitch(angle)
+          case KeyEvent.VK_A => Player.roll(-angle)
+          case KeyEvent.VK_D => Player.roll(angle)
+          case _ =>
+        }
+      }
+
+      override def keyReleased(e: KeyEvent): Unit = {}
+    })
+
     // disappear into the rendering loop
     mainLoop()
   }
@@ -44,33 +68,26 @@ object SwingDriver extends JFrame {
       doPhysics()
 
       // do graphics
-      render(getBufferStrategy.getDrawGraphics)
+      render(getBufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D])
       getBufferStrategy.show()
     }
   }
 
-  def doPhysics() {
-    val b = GameState.blocks(0)
-
-    if(b.position.x <= 0 || b.position.x >= getWidth - b.size.x) {
-      direction = new Vector3(-direction.x, direction.y, 0)
-    }
-
-    if(b.position.y <= 0 || b.position.y >= getHeight - b.size.y) {
-      direction = new Vector3(direction.x, -direction.y, 0)
-    }
-
-    b.position = b.position + direction
+  def doPhysics(): Unit = {
+    Player.position += Player.forward * speed
   }
 
-  def render(g:Graphics) {
-    g setColor Color.BLACK
+  def render(g:Graphics2D) {
+    g.setColor(Color.BLACK)
     g.fillRect(0, 0, getWidth, getHeight)
 
-    g setColor Color.RED
+    val screen = Toolkit.getDefaultToolkit.getScreenSize
+
+//    println("\n\nRendering:")
+
+//    g.setColor(Color.RED)
     for(b <- GameState.blocks) {
-      g.fillRect(b.position.x.toInt, b.position.y.toInt,
-        b.size.x.toInt, b.size.y.toInt)
+      b.render(g, (screen.width/2, screen.height/2), 1080 / math.Pi)
     }
   }
 
