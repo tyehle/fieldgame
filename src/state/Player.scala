@@ -4,14 +4,25 @@ package state
  *
  * Created by Tobin on 4/4/2014.
  */
-class Player(var position: Position, var forward: Position, var right: Position, var speed: Double) {
+class Player(var position: Position,
+             var forward: Position,
+             var right: Position,
+             var speed: Double,
+             var rollRate: Double,
+             var pitchRate: Double,
+             var yawRate: Double) {
   /* Clarification of directions. +x = ->, +y = v, +z = X
    * This means the vector (1,0,0) points right
    *                       (0,1,0) points down
    *                       (0,0,1) points into the screen
    */
 
-
+  def updateState(): Unit = {
+    pitch(pitchRate)
+    roll(rollRate)
+    yaw(yawRate)
+    position += forward * speed
+  }
 
   def pitch(theta: Double): Unit = {
     forward = forward.rotate(theta, right)

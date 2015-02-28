@@ -47,7 +47,7 @@ class Position(val x:Double, val y:Double, val z:Double) {
   /**
    * The cross product of this vector and the given vector
    */
-  def cross(other: Position) = Position(
+  def cross(other: Position): Position = Position(
     y*other.z - z*other.y,
     z*other.x - x*other.z,
     x*other.y - y*other.x)
@@ -55,7 +55,7 @@ class Position(val x:Double, val y:Double, val z:Double) {
   /**
    * The cross product of this vector and the given vector
    */
-  def *(other: Position) = cross(other)
+  def x(other: Position): Position = cross(other)
 
   /**
    * Rotates this vector by a number of radians about an axis in three dimensions.
@@ -87,7 +87,7 @@ class Position(val x:Double, val y:Double, val z:Double) {
       first = Position(-y/x,1,0).normalized()
     }
 
-    Some(first, (this * first).normalized())
+    Some(first, (this x first).normalized())
   }
 
   /**

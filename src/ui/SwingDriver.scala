@@ -41,20 +41,29 @@ object SwingDriver extends JFrame {
     setVisible(true)
 
     addKeyListener(new KeyListener {
+      private val speed = math.Pi / 36.0
+
       override def keyTyped(e: KeyEvent): Unit = {}
 
       override def keyPressed(e: KeyEvent): Unit = {
-        val angle = math.Pi / 36.0
         e.getKeyCode match {
-          case KeyEvent.VK_W => GameState.player.pitch(-angle)
-          case KeyEvent.VK_S => GameState.player.pitch(angle)
-          case KeyEvent.VK_A => GameState.player.roll(-angle)
-          case KeyEvent.VK_D => GameState.player.roll(angle)
+          case KeyEvent.VK_W => GameState.player.pitchRate = -speed
+          case KeyEvent.VK_S => GameState.player.pitchRate = speed
+          case KeyEvent.VK_A => GameState.player.rollRate = -speed
+          case KeyEvent.VK_D => GameState.player.rollRate = speed
           case _ =>
         }
       }
 
-      override def keyReleased(e: KeyEvent): Unit = {}
+      override def keyReleased(e: KeyEvent): Unit = {
+        e.getKeyCode match {
+          case KeyEvent.VK_W => GameState.player.pitchRate = 0
+          case KeyEvent.VK_S => GameState.player.pitchRate = 0
+          case KeyEvent.VK_A => GameState.player.rollRate = 0
+          case KeyEvent.VK_D => GameState.player.rollRate = 0
+          case _ =>
+        }
+      }
     })
 
     // disappear into the rendering loop
@@ -74,7 +83,7 @@ object SwingDriver extends JFrame {
   }
 
   def doPhysics(): Unit = {
-    GameState.player.position += GameState.player.forward * speed
+    GameState.player.updateState()
   }
 
   def render(g:Graphics2D) {

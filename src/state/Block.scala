@@ -28,7 +28,7 @@ class Block(var size:Position, var position:Position) {
                                        GameState.player.right,
                                        2*math.Pi)
 
-    camera.screenSpace(position, center, scale) match {
+    camera.screenSpace2(position, center, scale) match {
       case (Some(x), Some(y)) => g.fillOval(x - radius, y - radius, 2*radius, 2*radius)
       case _ => None
     }
