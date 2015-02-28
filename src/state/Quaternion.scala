@@ -10,12 +10,12 @@ class Quaternion(val r: Double, val i: Double, val j: Double, val k: Double) {
    * @param real The real component
    * @param imaginary The imaginary component
    */
-  def this(real: Double, imaginary: Vector3) = this(real, imaginary.x, imaginary.y, imaginary.z)
+  def this(real: Double, imaginary: Position) = this(real, imaginary.x, imaginary.y, imaginary.z)
 
   /**
    * @return The imaginary component as a three vector
    */
-  def imaginaryComponent: Vector3 = new Vector3(i, j, k)
+  def imaginaryComponent: Position = Position(i, j, k)
 
   /**
    * Multiplication is done in the same way as imaginary numbers, and then

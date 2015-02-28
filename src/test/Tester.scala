@@ -1,6 +1,6 @@
 package test
 
-import state.{Vector3, Player}
+import state.{GameState, Position}
 
 /**
  * 2/27/2015
@@ -14,8 +14,8 @@ object Tester {
   def vectorRotation() = {
     val angle = math.Pi *2.0 / 3.0
 
-    val dir = new Vector3(0, 0, 1)
-    val axis = new Vector3(1, 1, 1).normalized()
+    val dir = Position(0, 0, 1)
+    val axis = Position(1, 1, 1).normalized()
 
     println(dir.rotate(angle, axis))
   }
@@ -23,10 +23,10 @@ object Tester {
   def playerRotation() = {
     val angle = math.Pi / 4
 
-    println(Player)
-    Player.pitch(angle)
-    println(Player)
-    Player.pitch(angle)
-    println(Player)
+    println(GameState.player)
+    GameState.player.pitch(angle)
+    println(GameState.player)
+    GameState.player.pitch(angle)
+    println(GameState.player)
   }
 }

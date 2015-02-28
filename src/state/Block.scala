@@ -7,13 +7,13 @@ package state
 
 import java.awt.{Graphics2D, Color}
 
-class Block(var size:Vector3, var position:Vector3) {
+class Block(var size:Position, var position:Position) {
   def isLethal: Boolean = true
 
   /**
    *
-   * @param g
-   * @param center
+   * @param g The graphics object to draw on
+   * @param center The position of the center of the screen
    * @param scale Pixels per radian
    */
   def render(g:Graphics2D, center:(Int, Int), scale:Double) = {
@@ -21,26 +21,16 @@ class Block(var size:Vector3, var position:Vector3) {
 
     g.setColor(Color.RED)
 
-    // draw a circle in the right spot
-
-    // from camera to block
-    val toBlock = position - GameState.player.position
-    val alpha = math.acos((toBlock o Player.forward) / toBlock.length)
-    val planar = toBlock - Player.forward.scale(toBlock o Player.forward)
-    val cosBeta = (planar o Player.right) / planar.length
-
-//    val radius = size.length / 2
     val radius = 5
 
-    val x = alpha * cosBeta
-    val posy = alpha * math.sqrt(1 - cosBeta*cosBeta)
+    val camera = new LogarithmicCamera(GameState.player.position,
+                                       GameState.player.forward,
+                                       GameState.player.right,
+                                       2*math.Pi)
 
-    val y = if(((planar * Player.right) o Player.forward) < 0) posy
-            else -posy
-
-    val top = (x*scale - radius).asInstanceOf[Int] + center._1
-    val left = (y*scale - radius).asInstanceOf[Int] + center._2
-
-    g.fillOval(top, left, 2*radius.asInstanceOf[Int], 2*radius.asInstanceOf[Int])
+    camera.screenSpace(position, center, scale) match {
+      case (Some(x), Some(y)) => g.fillOval(x - radius, y - radius, 2*radius, 2*radius)
+      case _ => None
+    }
   }
 }

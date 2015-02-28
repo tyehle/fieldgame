@@ -19,10 +19,10 @@ object SwingDriver extends JFrame {
 //    GameState.blocks +:= new Block(new Vector3(100,100,100),
 //                                   new Vector3(100,100,100))
 
-    0 to 100 foreach {_ => GameState.blocks +:= new Block(new Vector3(0,0,0),
-                                                          new Vector3(Random.nextInt(200) - 100,
-                                                                      Random.nextInt(200) - 100,
-                                                                      Random.nextInt(200) - 100))}
+    0 to 100 foreach {_ => GameState.blocks +:= new Block(Position(0,0,0),
+                                                          Position(Random.nextInt(200) - 100,
+                                                                   Random.nextInt(200) - 100,
+                                                                   Random.nextInt(200) - 100))}
 
     val device = GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice
     setUndecorated(true)
@@ -46,10 +46,10 @@ object SwingDriver extends JFrame {
       override def keyPressed(e: KeyEvent): Unit = {
         val angle = math.Pi / 36.0
         e.getKeyCode match {
-          case KeyEvent.VK_W => Player.pitch(-angle)
-          case KeyEvent.VK_S => Player.pitch(angle)
-          case KeyEvent.VK_A => Player.roll(-angle)
-          case KeyEvent.VK_D => Player.roll(angle)
+          case KeyEvent.VK_W => GameState.player.pitch(-angle)
+          case KeyEvent.VK_S => GameState.player.pitch(angle)
+          case KeyEvent.VK_A => GameState.player.roll(-angle)
+          case KeyEvent.VK_D => GameState.player.roll(angle)
           case _ =>
         }
       }
@@ -74,7 +74,7 @@ object SwingDriver extends JFrame {
   }
 
   def doPhysics(): Unit = {
-    Player.position += Player.forward * speed
+    GameState.player.position += GameState.player.forward * speed
   }
 
   def render(g:Graphics2D) {

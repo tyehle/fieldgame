@@ -11,6 +11,6 @@ import scala.collection.mutable
  */
 object GameState {
   var blocks:mutable.Seq[Block] = ListBuffer.empty[Block]
-  var player = Player
+  var player = new Player(Position(0,0,0), Position(0, 0, 1), Position(1, 0, 0), 1.0)
 }
 
