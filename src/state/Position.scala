@@ -44,6 +44,10 @@ class Position(val x:Double, val y:Double, val z:Double) {
    */
   def *(a: Double) = scale(a)
 
+  def component(x:Boolean, y:Boolean, z:Boolean) = {
+    Position(if(x) this.x else 0, if(y) this.y else 0, if(z) this.z else 0)
+  }
+
   /**
    * The cross product of this vector and the given vector
    */

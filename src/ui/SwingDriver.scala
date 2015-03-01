@@ -18,11 +18,13 @@ object SwingDriver extends JFrame {
   def main(args: Array[String]) = {
 //    GameState.blocks +:= new Block(new Vector3(100,100,100),
 //                                   new Vector3(100,100,100))
-
-    0 to 100 foreach {_ => GameState.blocks +:= new Block(Position(0,0,0),
-                                                          Position(Random.nextInt(200) - 100,
-                                                                   Random.nextInt(200) - 100,
-                                                                   Random.nextInt(200) - 100))}
+    val bounds = 200
+    0 to 100 foreach {_ => GameState.blocks +:= new Block(Position(Random.nextInt(20) + 10,
+                                                                   Random.nextInt(20) + 10,
+                                                                   Random.nextInt(20) + 10),
+                                                          Position(Random.nextInt(bounds*2) - bounds,
+                                                                   Random.nextInt(bounds*2) - bounds,
+                                                                   Random.nextInt(bounds*2) - bounds))}
 
     val device = GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice
     setUndecorated(true)
@@ -42,11 +44,14 @@ object SwingDriver extends JFrame {
 
     addKeyListener(new KeyListener {
       private val speed = math.Pi / 36.0
+      private val accel = .1
 
       override def keyTyped(e: KeyEvent): Unit = {}
 
       override def keyPressed(e: KeyEvent): Unit = {
         e.getKeyCode match {
+          case KeyEvent.VK_CONTROL => GameState.player.speed -= accel
+          case KeyEvent.VK_SHIFT => GameState.player.speed += accel
           case KeyEvent.VK_W => GameState.player.pitchRate = -speed
           case KeyEvent.VK_S => GameState.player.pitchRate = speed
           case KeyEvent.VK_A => GameState.player.rollRate = -speed
@@ -87,17 +92,30 @@ object SwingDriver extends JFrame {
   }
 
   def render(g:Graphics2D) {
+    val screen = Toolkit.getDefaultToolkit.getScreenSize
+    val center = (screen.width/2, screen.height/2)
+    val scale = center._1.min(center._2) / math.Pi
+
     g.setColor(Color.BLACK)
     g.fillRect(0, 0, getWidth, getHeight)
 
-    val screen = Toolkit.getDefaultToolkit.getScreenSize
+    // Render a HUD
+    g.setColor(new Color(0x0066cc))
+    drawOval(g, center, (math.Pi / 2 * scale).asInstanceOf[Int])
+    drawOval(g, center, (math.Pi * scale).asInstanceOf[Int])
+    g.drawString("Speed: "+GameState.player.speed, 5, 17)
+
+    val camera = new LogarithmicCamera(GameState.player.position,
+                                       GameState.player.forward, GameState.player.right)
 
 //    println("\n\nRendering:")
 
 //    g.setColor(Color.RED)
-    for(b <- GameState.blocks) {
-      b.render(g, (screen.width/2, screen.height/2), 1080 / math.Pi)
-    }
+    GameState.blocks.foreach(_.render(g, center, camera, scale))
+  }
+
+  def drawOval(g: Graphics2D, center: (Int, Int), radius: Int): Unit = {
+    g.drawOval(center._1 - radius, center._2 - radius, 2*radius, 2*radius)
   }
 
   override def paint(g:Graphics) {
