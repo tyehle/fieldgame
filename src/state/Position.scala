@@ -8,7 +8,7 @@ package state
 
 class Position(val x:Double, val y:Double, val z:Double) {
 
-  override def toString:String = "( "+x+", "+y+", "+z+" )"
+  override def toString:String = s"( $x, $y, $z )"
 
   def +(other: Position) = Position(x+other.x, y+other.y, z+other.z)
   def -(other: Position) = Position(x-other.x, y-other.y, z-other.z)
@@ -68,7 +68,7 @@ class Position(val x:Double, val y:Double, val z:Double) {
    * @return A rotated version of this vector
    */
   def rotate(theta: Double, axis: Position): Position = {
-    val q = new Quaternion(math.cos(theta / 2), axis.normalized() * math.sin(theta / 2))
+    val q = new Quaternion(math.cos(theta / 2), axis.normalized * math.sin(theta / 2))
     val p = new Quaternion(0, this)
     (q*p*q.inverse).imaginaryComponent
   }
@@ -88,18 +88,34 @@ class Position(val x:Double, val y:Double, val z:Double) {
     } else {
       // set zn = 0 and yn = 1
       // x*xn + y*yn = 0
-      first = Position(-y/x,1,0).normalized()
+      first = Position(-y/x,1,0).normalized
     }
 
-    Some(first, (this x first).normalized())
+    Some(first, (this x first).normalized)
   }
 
   /**
    * Returns a normalized copy of this vector.
    */
-  def normalized() = {
+  def normalized = {
     val len = mag
     Position(x/len, y/len, z/len)
+  }
+
+  def toSeq: Seq[Double] = Seq(x, y, z)
+
+  def canEqual(that: Any) = that.isInstanceOf[Position]
+
+  override def equals(that: Any): Boolean = {
+    that match {
+      case that: Position => that.canEqual(this) && x == that.x && y == that.y && z == that.z
+      case _ => false
+    }
+  }
+
+  override def hashCode: Int = {
+    val prime = 41
+    prime*prime*x.## + prime*y.## + z.##
   }
 }
 
@@ -107,4 +123,5 @@ object Position {
   def apply(x: Double, y: Double, z: Double): Position = {
     new Position(x, y, z)
   }
+  val zero = Position(0,0,0)
 }
