@@ -24,7 +24,7 @@ class Block(var size:Position, var position:Position) {
                         position + size.component(x=true, y=false, z=true),
                         position + size.component(x=false, y=true, z=true))
 
-    g.setColor(Color.RED)
+//    g.setColor(Color.MAGENTA)
 
     val lines = List((false, false, false),
                      (true, true, false),

@@ -18,8 +18,8 @@ object SwingDriver extends JFrame {
   def main(args: Array[String]) = {
 //    GameState.blocks +:= new Block(new Vector3(100,100,100),
 //                                   new Vector3(100,100,100))
-    val bounds = 200
-    0 to 100 foreach {_ => GameState.blocks +:= new Block(Position(Random.nextInt(20) + 10,
+    val bounds = 700
+    0 to 10000 foreach {_ => GameState.blocks +:= new Block(Position(Random.nextInt(20) + 10,
                                                                    Random.nextInt(20) + 10,
                                                                    Random.nextInt(20) + 10),
                                                           Position(Random.nextInt(bounds*2) - bounds,
@@ -111,7 +111,20 @@ object SwingDriver extends JFrame {
 //    println("\n\nRendering:")
 
 //    g.setColor(Color.RED)
-    GameState.blocks.foreach(_.render(g, center, camera, scale))
+    val lod = 200
+    var drew = 0
+    for(block <- GameState.blocks) {
+      val distance = (block.position - GameState.player.position).mag
+      if(distance < lod) {
+        drew += 1
+        val brightness = (Math.exp(- distance / lod * 3.5) * 255).toInt
+        g.setColor(new Color(brightness, 0, brightness))
+        block.render(g, center, camera, scale)
+      }
+    }
+    g.setColor(new Color(0x0066cc))
+    g.drawString(s"Drew $drew blocks", 5, 34)
+//    GameState.blocks.foreach(_.render(g, center, camera, scale))
   }
 
   def drawOval(g: Graphics2D, center: (Int, Int), radius: Int): Unit = {
