@@ -2,13 +2,13 @@ package test.state
 
 import org.scalatest.{Matchers, FlatSpec}
 import state.{Position, Quaternion}
-import TestUtil._
 
 /**
  * @author Tobin Yehle
  */
 class QuaternionSpec extends FlatSpec with Matchers {
   private val q = new Quaternion(1.2, 1, 2, 5)
+  private val eps = 1e-10
 
   "A quaternion" should "print as a quadruple" in {
     q.toString should be ("Quaternion(1.2, 1.0, 2.0, 5.0)")
@@ -55,10 +55,10 @@ class QuaternionSpec extends FlatSpec with Matchers {
   it should "have an inverse equal to the norm squared" in {
     q.inverse should be (q.conjugate / (q.norm*q.norm))
     val i = q.inverse * q
-    i.r should beAlmost(1)
-    i.i should beAlmost(0)
-    i.j should beAlmost(0)
-    i.k should beAlmost(0)
+    i.r should be (1.0 +- eps)
+    i.i should be (0.0 +- eps)
+    i.j should be (0.0 +- eps)
+    i.k should be (0.0 +- eps)
   }
 
   it should "be convertible to a sequence" in {

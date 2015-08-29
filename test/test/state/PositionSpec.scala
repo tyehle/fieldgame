@@ -2,13 +2,14 @@ package test.state
 
 import org.scalatest.{FlatSpec, Matchers}
 import state.Position
-import TestUtil._
 
 /**
  * 2/27/2015
  * @author Tobin Yehle
  */
 class PositionSpec extends FlatSpec with Matchers {
+  private val eps = 1e-10
+
   "A Position" should "print in cartesian coordinates" in {
     Position(1,2,5).toString should be("Position(1.0, 2.0, 5.0)")
   }
@@ -79,11 +80,11 @@ class PositionSpec extends FlatSpec with Matchers {
     basis should matchPattern { case Some((j:Position, k:Position)) => }
     basis match {
       case Some((j, k)) =>
-        j.length should beAlmost(1)
-        k.length should beAlmost(1)
-        i o j should beAlmost(0)
-        i o k should beAlmost(0)
-        j o k should beAlmost(0)
+        j.length should be (1.0 +- eps)
+        k.length should be (1.0 +- eps)
+        i o j should be (0.0 +- eps)
+        i o k should be (0.0 +- eps)
+        j o k should be (0.0 +- eps)
       case None =>
     }
 
@@ -92,11 +93,11 @@ class PositionSpec extends FlatSpec with Matchers {
     basis should matchPattern { case Some((j:Position, k:Position)) => }
     basis match {
       case Some((j, k)) =>
-        j.length should beAlmost(1)
-        k.length should beAlmost(1)
-        i o j should beAlmost(0)
-        i o k should beAlmost(0)
-        j o k should beAlmost(0)
+        j.length should be (1.0 +- eps)
+        k.length should be (1.0 +- eps)
+        i o j should be (0.0 +- eps)
+        i o k should be (0.0 +- eps)
+        j o k should be (0.0 +- eps)
       case None =>
     }
   }
@@ -104,7 +105,7 @@ class PositionSpec extends FlatSpec with Matchers {
   it should "point the same direction after being normalized" in {
     val i = Position(1,2,5)
     for(diff <- (i.normalized * i.length - i).toSeq) {
-      diff should beAlmost(0)
+      diff should be (0.0 +- eps)
     }
   }
 
