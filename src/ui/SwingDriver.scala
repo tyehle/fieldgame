@@ -114,7 +114,7 @@ object SwingDriver extends JFrame {
     val lod = 200
     var drew = 0
     for(block <- GameState.blocks) {
-      val distance = (block.position - GameState.player.position).mag
+      val distance = (block.position - GameState.player.position).length
       if(distance < lod) {
         drew += 1
         val brightness = (Math.exp(- distance / lod * 3.5) * 255).toInt

@@ -9,16 +9,18 @@
     </properties>
     <CLASSES>
       <root url="jar://C:/Program Files (x86)/scala/lib/scala-library.jar!/" />
-      <root url="jar://C:/Program Files (x86)/scala/lib/scala-swing.jar!/" />
-      <root url="jar://C:/Program Files (x86)/scala/lib/scala-actors.jar!/" />
+      <root url="jar://C:/Program Files (x86)/scala/lib/scala-actors-2.11.0.jar!/" />
+      <root url="jar://C:/Program Files (x86)/scala/lib/scala-swing_2.11-1.0.1.jar!/" />
     </CLASSES>
-    <JAVADOC>
-      <root url="file://C:/Program Files (x86)/scala/doc/scala-devel-docs/api" />
-    </JAVADOC>
+    <JAVADOC />
     <SOURCES>
-      <root url="jar://C:/Program Files (x86)/scala/src/scala-library-src.jar!/" />
-      <root url="jar://C:/Program Files (x86)/scala/src/scala-swing-src.jar!/" />
-      <root url="jar://C:/Program Files (x86)/scala/src/scala-actors-src.jar!/" />
+      <root url="file://C:/Program Files (x86)/scala/src/actors" />
+      <root url="file://C:/Program Files (x86)/scala/src/asm" />
+      <root url="file://C:/Program Files (x86)/scala/src/forkjoin" />
+      <root url="file://C:/Program Files (x86)/scala/src/library" />
+      <root url="file://C:/Program Files (x86)/scala/src/partest-extras" />
+      <root url="file://C:/Program Files (x86)/scala/src/partest-javaagent" />
+      <root url="file://C:/Program Files (x86)/scala/src/repl" />
     </SOURCES>
   </library>
 </component>
