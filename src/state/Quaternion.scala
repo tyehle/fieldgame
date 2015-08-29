@@ -5,6 +5,12 @@ package state
  * @author Tobin Yehle
  */
 class Quaternion(val r: Double, val i: Double, val j: Double, val k: Double) {
+
+  /**
+   * Represents this quaternion as a quadruple
+   */
+  override def toString = s"Quaternion($r, $i, $j, $k)"
+
   /**
    * Build a quaternion from a real part, and an imaginary three vector
    * @param real The real component
@@ -77,4 +83,16 @@ class Quaternion(val r: Double, val i: Double, val j: Double, val k: Double) {
    * @return The inverse of this quaternion
    */
   def inverse: Quaternion = conjugate / (norm*norm)
+
+  def toSeq: Seq[Double] = Seq(r, i, j, k)
+
+  def canEqual(that: Any): Boolean = that.isInstanceOf[Quaternion]
+  override def equals(that: Any): Boolean = that match {
+    case that:Quaternion => canEqual(that) && r == that.r && i == that.i && j == that.j && k == that.k
+    case _ => false
+  }
+  override def hashCode: Int = {
+    val prime = 41
+    toSeq.foldLeft(0)((total, i) => total*prime + i.##)
+  }
 }

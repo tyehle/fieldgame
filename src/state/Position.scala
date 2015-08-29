@@ -8,7 +8,7 @@ package state
 
 class Position(val x:Double, val y:Double, val z:Double) {
 
-  override def toString:String = s"( $x, $y, $z )"
+  override def toString:String = s"Position($x, $y, $z)"
 
   def +(other: Position) = Position(x+other.x, y+other.y, z+other.z)
   def -(other: Position) = Position(x-other.x, y-other.y, z-other.z)

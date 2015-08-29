@@ -2,18 +2,15 @@ package test.state
 
 import org.scalatest.{FlatSpec, Matchers}
 import state.Position
+import TestUtil._
 
 /**
  * 2/27/2015
  * @author Tobin Yehle
  */
-class VectorSpec extends FlatSpec with Matchers {
-  val eps = 1e-10
-
-  def beWithin(eps:Double)(value:Double) = be > value-eps and be < value+eps
-
+class PositionSpec extends FlatSpec with Matchers {
   "A Position" should "print in cartesian coordinates" in {
-    Position(1,2,5).toString should be("( 1.0, 2.0, 5.0 )")
+    Position(1,2,5).toString should be("Position(1.0, 2.0, 5.0)")
   }
 
   it should "add and subtract like a vector" in {
@@ -82,11 +79,11 @@ class VectorSpec extends FlatSpec with Matchers {
     basis should matchPattern { case Some((j:Position, k:Position)) => }
     basis match {
       case Some((j, k)) =>
-        j.length should beWithin(eps)(1)
-        k.length should beWithin(eps)(1)
-        i o j should beWithin(eps)(0)
-        i o k should beWithin(eps)(0)
-        j o k should beWithin(eps)(0)
+        j.length should beAlmost(1)
+        k.length should beAlmost(1)
+        i o j should beAlmost(0)
+        i o k should beAlmost(0)
+        j o k should beAlmost(0)
       case None =>
     }
 
@@ -95,11 +92,11 @@ class VectorSpec extends FlatSpec with Matchers {
     basis should matchPattern { case Some((j:Position, k:Position)) => }
     basis match {
       case Some((j, k)) =>
-        j.length should beWithin(eps)(1)
-        k.length should beWithin(eps)(1)
-        i o j should beWithin(eps)(0)
-        i o k should beWithin(eps)(0)
-        j o k should beWithin(eps)(0)
+        j.length should beAlmost(1)
+        k.length should beAlmost(1)
+        i o j should beAlmost(0)
+        i o k should beAlmost(0)
+        j o k should beAlmost(0)
       case None =>
     }
   }
@@ -107,7 +104,7 @@ class VectorSpec extends FlatSpec with Matchers {
   it should "point the same direction after being normalized" in {
     val i = Position(1,2,5)
     for(diff <- (i.normalized * i.length - i).toSeq) {
-      diff should beWithin(eps)(0)
+      diff should beAlmost(0)
     }
   }
 
