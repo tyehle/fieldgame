@@ -13,7 +13,11 @@ class LogarithmicCamera(var position: Position,
                         var right: Position,
                         medium: Medium,
                         val center: (Int, Int),
-                        var scale: Double) {
+                        initialFov: Double) {
+
+  /** Scale of the screen space in pixels per radian */
+  var scale = center._1.min(center._2) / initialFov
+  def setFov(rads: Double) = { scale = center._1.min(center._2) / rads * 2 }
 
   private var _linesRendered: Int = 0
   def resetRenderCount() = { _linesRendered = 0 }

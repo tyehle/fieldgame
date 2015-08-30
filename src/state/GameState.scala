@@ -15,7 +15,7 @@ import scala.util.Random
  * @author Tobin Yehle
  */
 object GameState {
-  val bounds = new Position(1000, 1000, 1000)
+  val bounds = new Position(200, 200, 200)
 
   private val targetDensity = 5e-6
   val blocks:mutable.Buffer[Block] = ListBuffer.fill((targetDensity*GameState.bounds.volume).toInt)(generateBlock)
@@ -32,9 +32,11 @@ object GameState {
   val playerCamera = new LogarithmicCamera(player.location, player.forward, player.right,
                                            medium = new Fog(viewDistance, Color.black),
                                            center = (screen.width / 2, screen.height / 2),
-                                           scale = screen.width.min(screen.height) / math.Pi * .5)
+                                           initialFov = math.Pi)
 
   val hud = new CircleHud()
+
+  val goal:Goal = new ClearGoal(blocks.length)
 
   def generateBlock = {
     val size = Position(Random.nextInt(20) + 10,
@@ -43,7 +45,8 @@ object GameState {
     val position = Position(Random.nextInt((GameState.bounds.x - size.x).toInt),
                             Random.nextInt((GameState.bounds.y - size.y).toInt),
                             Random.nextInt((GameState.bounds.z - size.z).toInt))
-    new Block(position, size, if(Random.nextBoolean()) new Color(0x006600) else new Color(0xff00ff))
+    val speed = Random.nextDouble()
+    new Block(position, size, Color.magenta)
   }
 }
 

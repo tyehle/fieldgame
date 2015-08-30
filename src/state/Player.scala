@@ -18,6 +18,11 @@ class Player(var location: Position,
    */
 
   def updateState(elapsed: Long): Unit = {
+    move(elapsed)
+    removeBlocks()
+  }
+
+  private def move(elapsed: Long): Unit = {
     pitch(pitchRate * elapsed)
     roll(rollRate * elapsed)
     yaw(yawRate * elapsed)
@@ -41,6 +46,11 @@ class Player(var location: Position,
    */
   def roll(theta: Double): Unit = {
     right = right.rotate(theta, forward)
+  }
+
+  private def removeBlocks() = {
+    val toRemove = GameState.blocks.indices.filter(i => GameState.blocks(i).contains(location)).sorted
+    toRemove.indices.map(i => toRemove(i) + i).foreach(GameState.blocks.remove) // Relies on foreach going in order
   }
 
   override def toString: String = {

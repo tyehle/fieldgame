@@ -81,7 +81,7 @@ class BlockSpec extends FlatSpec with Matchers {
                       Position(-bounds.x,-bounds.y,bounds.z),
 
                       Position(-bounds.x,-bounds.y,-bounds.z))
-    val imageEdges = offsets.map(off => block.edges.map(line => Line(line.start + off, line.end + off)))
+    val imageEdges = offsets.map(off => block.edges.map(_.offset(off)))
 
     block.images should have size 26
     block.images.map(_.location) should contain theSameElementsAs offsets.map(_ + location)

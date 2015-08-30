@@ -12,7 +12,8 @@ object PhysicsRenderLoop extends Runnable {
   override def run(): Unit = {
     var lastLoopTime:Long = 0
     var loopTime = System.nanoTime() - (1e9/30).toLong
-    while (true) {
+
+    while (!GameState.goal.completed) {
       lastLoopTime = loopTime
       loopTime = System.nanoTime()
 
@@ -22,10 +23,16 @@ object PhysicsRenderLoop extends Runnable {
       render(buffer.getDrawGraphics.asInstanceOf[Graphics2D], GameState.playerCamera)
       buffer.show()
     }
+
+    GameWindow.setVisible(false)
+    GameWindow.dispose()
   }
 
   def doPhysics(elapsed: Long): Unit = {
     GameState.player.updateState(elapsed)
+    GameState.blocks.foreach(_.updateState(elapsed))
+
+    GameState.goal.update(elapsed)
 
     // update camera position
     GameState.playerCamera.position = GameState.player.location
