@@ -16,17 +16,24 @@ import scala.util.Random
  */
 object GameState {
   val bounds = new Position(1000, 1000, 1000)
-  private val targetDensity = 3e-6
+
+  private val targetDensity = 5e-6
   val blocks:mutable.Buffer[Block] = ListBuffer.fill((targetDensity*GameState.bounds.volume).toInt)(generateBlock)
+  blocks.foreach(_.edges) // force computation of the edges
+  blocks.foreach(_.images) // force computation of the images
+
   val player = new Player(bounds / 2, // position
-                          Position(0, 0, 1), Position(1, 0, 0), // orientation
+                          Position(-1, 1, 1).normalized, Position(1, 0, 1).normalized, // orientation
                           5e-8, // speed
                           0, 0, 0) // rotation speed
+
+  val viewDistance = 200 // should be less than bounds
   private val screen = Toolkit.getDefaultToolkit.getScreenSize
-  val playerCamera = new LogarithmicCamera(player.position, player.forward, player.right,
-                                           medium = new Fog(200, Color.black),
+  val playerCamera = new LogarithmicCamera(player.location, player.forward, player.right,
+                                           medium = new Fog(viewDistance, Color.black),
                                            center = (screen.width / 2, screen.height / 2),
                                            scale = screen.width.min(screen.height) / math.Pi * .5)
+
   val hud = new CircleHud()
 
   def generateBlock = {

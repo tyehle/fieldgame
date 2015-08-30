@@ -28,7 +28,7 @@ object PhysicsRenderLoop extends Runnable {
     GameState.player.updateState(elapsed)
 
     // update camera position
-    GameState.playerCamera.position = GameState.player.position
+    GameState.playerCamera.position = GameState.player.location
     GameState.playerCamera.forward = GameState.player.forward
     GameState.playerCamera.right = GameState.player.right
   }
@@ -40,6 +40,6 @@ object PhysicsRenderLoop extends Runnable {
     GameState.hud.render(g, camera)
 
     camera.resetRenderCount()
-    GameState.blocks.foreach(_.render(g, camera))
+    GameState.blocks.par.foreach(_.render(g, camera))
   }
 }

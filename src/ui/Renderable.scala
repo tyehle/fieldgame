@@ -9,9 +9,7 @@ import state.Position
  */
 trait Renderable {
   def edges: Set[Line]
-
   def location: Position
-
   def color: Color
 
   /**
@@ -22,9 +20,7 @@ trait Renderable {
   def render(g:Graphics2D, camera: LogarithmicCamera) = {
     camera.transformColor(location, color) match {
       case None =>
-      case Some(c) =>
-        g.setColor(c)
-        edges.foreach(line => camera.drawLine(g, line))
+      case Some(c) => edges.foreach(line => camera.drawLine(g, line, c))
     }
   }
 }

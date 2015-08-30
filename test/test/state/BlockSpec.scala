@@ -3,7 +3,7 @@ package test.state
 import java.awt.Color
 
 import org.scalatest.{Matchers, FlatSpec}
-import state.{Position, Block}
+import state.{GameState, Position, Block}
 import ui.Line
 
 /**
@@ -33,12 +33,59 @@ class BlockSpec extends FlatSpec with Matchers {
 
     val c = unitBlock.color
     val expectedEdges = Seq(
-      Line(Position.zero, Position(1,0,0), c), Line(Position.zero, Position(0,1,0), c), Line(Position.zero, Position(0,0,1), c),
-      Line(Position(1,1,0),Position(0,1,0),c), Line(Position(1,1,0),Position(1,0,0),c), Line(Position(1,1,0),Position(1,1,1),c),
-      Line(Position(1,0,1),Position(0,0,1),c), Line(Position(1,0,1),Position(1,1,1),c), Line(Position(1,0,1),Position(1,0,0),c),
-      Line(Position(0,1,1),Position(1,1,1),c), Line(Position(0,1,1),Position(0,0,1),c), Line(Position(0,1,1),Position(0,1,0),c)
+      Line(Position.zero, Position(1,0,0)), Line(Position.zero, Position(0,1,0)), Line(Position.zero, Position(0,0,1)),
+      Line(Position(1,1,0),Position(0,1,0)), Line(Position(1,1,0),Position(1,0,0)), Line(Position(1,1,0),Position(1,1,1)),
+      Line(Position(1,0,1),Position(0,0,1)), Line(Position(1,0,1),Position(1,1,1)), Line(Position(1,0,1),Position(1,0,0)),
+      Line(Position(0,1,1),Position(1,1,1)), Line(Position(0,1,1),Position(0,0,1)), Line(Position(0,1,1),Position(0,1,0))
     )
 
     edges should contain theSameElementsAs expectedEdges
+  }
+
+  it should "produce a set of images" in {
+    val bounds = GameState.bounds
+    val location = Position(100, 40, 20)
+    val block = new Block(location, Position(10, 10, 10), Color.magenta)
+
+    val offsets = Seq(Position(bounds.x,0,0),
+                      Position(0,bounds.y,0),
+                      Position(0,0,bounds.z),
+
+                      Position(-bounds.x,0,0),
+                      Position(0,-bounds.y,0),
+                      Position(0,0,-bounds.z),
+
+                      Position(0,bounds.y,bounds.z),
+                      Position(bounds.x,0,bounds.z),
+                      Position(bounds.x,bounds.y,0),
+
+                      Position(0,-bounds.y,bounds.z),
+                      Position(-bounds.x,0,bounds.z),
+                      Position(-bounds.x,bounds.y,0),
+
+                      Position(0,bounds.y,-bounds.z),
+                      Position(bounds.x,0,-bounds.z),
+                      Position(bounds.x,-bounds.y,0),
+
+                      Position(0,-bounds.y,-bounds.z),
+                      Position(-bounds.x,0,-bounds.z),
+                      Position(-bounds.x,-bounds.y,0),
+
+                      Position(bounds.x,bounds.y,bounds.z),
+
+                      Position(-bounds.x,bounds.y,bounds.z),
+                      Position(bounds.x,-bounds.y,bounds.z),
+                      Position(bounds.x,bounds.y,-bounds.z),
+
+                      Position(bounds.x,-bounds.y,-bounds.z),
+                      Position(-bounds.x,bounds.y,-bounds.z),
+                      Position(-bounds.x,-bounds.y,bounds.z),
+
+                      Position(-bounds.x,-bounds.y,-bounds.z))
+    val imageEdges = offsets.map(off => block.edges.map(line => Line(line.start + off, line.end + off)))
+
+    block.images should have size 26
+    block.images.map(_.location) should contain theSameElementsAs offsets.map(_ + location)
+    block.images.map(_.edges) should contain theSameElementsAs imageEdges
   }
 }

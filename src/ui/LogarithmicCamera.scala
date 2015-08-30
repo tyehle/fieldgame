@@ -38,7 +38,7 @@ class LogarithmicCamera(var position: Position,
     math.sqrt((a._1 - b._1) * (a._1 - b._1) + (a._2 - b._2) * (a._2 - b._2))
   }
 
-  def drawLine(g: Graphics2D, line: Line) = {
+  def drawLine(g: Graphics2D, line: Line, color: Color) = {
     val first = screenSpace(line.start)
     val last = screenSpace(line.end)
 
@@ -48,7 +48,7 @@ class LogarithmicCamera(var position: Position,
 
     for ((start, end) <- first +: points zip points if lineIsOnScreen(start, end)) {
       _linesRendered += 1
-      g.drawLine(start._1, start._2, end._1, end._2)
+      g.synchronized { g.setColor(color); g.drawLine(start._1, start._2, end._1, end._2) }
     }
   }
 

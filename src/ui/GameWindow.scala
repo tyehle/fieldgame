@@ -3,9 +3,6 @@ package ui
 import java.awt._
 import javax.swing._
 import controll.{PhysicsRenderLoop, KeyboardController}
-import state.{Position, Block, GameState}
-
-import scala.util.Random
 
 /**
  *
@@ -32,7 +29,6 @@ object GameWindow extends JFrame {
 
     addKeyListener(new KeyboardController)
 
-    // start the rendering loop
     new Thread(PhysicsRenderLoop).start()
   }
 }

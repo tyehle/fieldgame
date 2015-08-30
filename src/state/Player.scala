@@ -4,7 +4,7 @@ package state
  *
  * @author Tobin Yehle
  */
-class Player(var position: Position,
+class Player(var location: Position,
              var forward: Position,
              var right: Position,
              var speed: Double,
@@ -21,8 +21,8 @@ class Player(var position: Position,
     pitch(pitchRate * elapsed)
     roll(rollRate * elapsed)
     yaw(yawRate * elapsed)
-    position += forward * (speed * elapsed)
-    position = position.wrap(GameState.bounds)
+    location += forward * (speed * elapsed)
+    location = location.wrap(GameState.bounds)
   }
 
   def pitch(theta: Double): Unit = {
@@ -44,6 +44,6 @@ class Player(var position: Position,
   }
 
   override def toString: String = {
-    "Player at "+position+", pointing "+forward+", going "+speed+", oriented right "+right
+    "Player at "+location+", pointing "+forward+", going "+speed+", oriented right "+right
   }
 }

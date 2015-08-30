@@ -77,6 +77,7 @@ class Position(val x:Double, val y:Double, val z:Double) {
     (q*p*q.inverse).imaginaryComponent
   }
 
+  // TODO: check this function
   def wrap(max: Position): Position = {
     if(x < 0 || x > max.x || y < 0 || y > max.y || z < 0 || z > max.z)
       new Position(x % max.x, y % max.y, z % max.z)
