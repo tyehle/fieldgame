@@ -17,13 +17,13 @@ object GameState {
   val blocks:mutable.Buffer[Block] = ListBuffer.empty[Block]
   val player = new Player(Position(0,0,0), // position
                           Position(0, 0, 1), Position(1, 0, 0), // orientation
-                          1.0, // speed
+                          5e-8, // speed
                           0, 0, 0) // rotation speed
   private val screen = Toolkit.getDefaultToolkit.getScreenSize
   val playerCamera = new LogarithmicCamera(player.position, player.forward, player.right,
                                            medium = new Fog(200, Color.black),
                                            center = (screen.width / 2, screen.height / 2),
-                                           scale = screen.width.min(screen.height) / math.Pi * 1)
+                                           scale = screen.width.min(screen.height) / math.Pi * .5)
   val hud = new CircleHud()
 }
 

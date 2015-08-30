@@ -2,7 +2,7 @@ package ui
 
 import java.awt._
 import javax.swing._
-import controll.KeyboardController
+import controll.{PhysicsRenderLoop, KeyboardController}
 import state._
 
 import scala.util.Random
@@ -12,8 +12,8 @@ import scala.util.Random
  * @author Tobin Yehle
  */
 
-object SwingDriver extends JFrame {
-  def main(args: Array[String]) = {
+object GameWindow extends JFrame {
+  def main(args: Array[String]): Unit = {
     //    GameState.blocks +:= new Block(new Vector3(100,100,100),
     //                                   new Vector3(100,100,100))
     val bounds = 700
@@ -45,38 +45,7 @@ object SwingDriver extends JFrame {
 
     addKeyListener(new KeyboardController)
 
-    // disappear into the rendering loop
-    mainLoop()
-  }
-
-  def mainLoop() {
-    val done = false
-    while (!done) {
-      // do physics
-      doPhysics()
-
-      // do graphics
-      render(getBufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D], GameState.playerCamera)
-      getBufferStrategy.show()
-    }
-  }
-
-  def doPhysics(): Unit = {
-    GameState.player.updateState()
-
-    // update camera position
-    GameState.playerCamera.position = GameState.player.position
-    GameState.playerCamera.forward = GameState.player.forward
-    GameState.playerCamera.right = GameState.player.right
-  }
-
-  def render(g: Graphics2D, camera: LogarithmicCamera) {
-    g.setColor(Color.black)
-    g.fillRect(0, 0, getWidth, getHeight)
-
-    GameState.hud.render(g, camera)
-
-    camera.resetRenderCount()
-    GameState.blocks.foreach(_.render(g, camera))
+    // start the rendering loop
+    new Thread(PhysicsRenderLoop).start()
   }
 }

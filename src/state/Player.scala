@@ -17,11 +17,11 @@ class Player(var position: Position,
    *                       (0,0,1) points into the screen
    */
 
-  def updateState(): Unit = {
-    pitch(pitchRate)
-    roll(rollRate)
-    yaw(yawRate)
-    position += forward * speed
+  def updateState(elapsed: Long): Unit = {
+    pitch(pitchRate * elapsed)
+    roll(rollRate * elapsed)
+    yaw(yawRate * elapsed)
+    position += forward * (speed * elapsed)
   }
 
   def pitch(theta: Double): Unit = {
