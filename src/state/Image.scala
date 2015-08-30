@@ -1,8 +1,8 @@
-package ui
+package state
 
 import java.awt.Color
 
-import state.Position
+import ui.Renderable
 
 /**
  * @author Tobin Yehle

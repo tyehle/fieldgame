@@ -7,7 +7,7 @@ package state
 
 import java.awt.{Graphics2D, Color}
 
-import ui.{Image, LogarithmicCamera, Line, Renderable}
+import ui.{LogarithmicCamera, Renderable}
 
 class Block(var location:Position, var size:Position, val color: Color) extends Renderable {
   val isLethal: Boolean = true

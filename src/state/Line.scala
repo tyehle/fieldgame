@@ -1,6 +1,4 @@
-package ui
-
-import state.Position
+package state
 
 /**
  * @author Tobin Yehle

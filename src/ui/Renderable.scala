@@ -2,7 +2,7 @@ package ui
 
 import java.awt.{Color, Graphics2D}
 
-import state.Position
+import state.{Line, Position}
 
 /**
  * @author Tobin Yehle

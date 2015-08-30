@@ -3,8 +3,7 @@ package test.state
 import java.awt.Color
 
 import org.scalatest.{Matchers, FlatSpec}
-import state.{GameState, Position, Block}
-import ui.Line
+import state.{Line, GameState, Position, Block}
 
 /**
  * @author Tobin Yehle
