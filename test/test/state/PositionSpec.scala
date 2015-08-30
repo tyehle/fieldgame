@@ -104,9 +104,7 @@ class PositionSpec extends FlatSpec with Matchers {
 
   it should "point the same direction after being normalized" in {
     val i = Position(1,2,5)
-    for(diff <- (i.normalized * i.length - i).toSeq) {
-      diff should be (0.0 +- eps)
-    }
+    all ((i.normalized * i.length - i).toSeq) should be (0.0 +- eps)
   }
 
   it should "know what it can equal" in {

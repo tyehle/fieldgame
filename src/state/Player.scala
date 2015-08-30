@@ -2,7 +2,7 @@ package state
 
 /**
  *
- * Created by Tobin on 4/4/2014.
+ * @author Tobin Yehle
  */
 class Player(var position: Position,
              var forward: Position,

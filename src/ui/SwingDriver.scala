@@ -3,28 +3,30 @@ package ui
 import java.awt._
 import java.awt.event.{KeyEvent, KeyListener}
 import javax.swing._
+import controll.KeyboardController
 import state._
 
 import scala.util.Random
 
 /**
  *
- * Created by Tobin on 4/4/2014.
+ * @author Tobin Yehle
  */
 
 object SwingDriver extends JFrame {
-  val speed = 1
-
   def main(args: Array[String]) = {
-//    GameState.blocks +:= new Block(new Vector3(100,100,100),
-//                                   new Vector3(100,100,100))
+    //    GameState.blocks +:= new Block(new Vector3(100,100,100),
+    //                                   new Vector3(100,100,100))
     val bounds = 700
-    0 to 10000 foreach {_ => GameState.blocks +:= new Block(Position(Random.nextInt(20) + 10,
-                                                                   Random.nextInt(20) + 10,
-                                                                   Random.nextInt(20) + 10),
-                                                          Position(Random.nextInt(bounds*2) - bounds,
-                                                                   Random.nextInt(bounds*2) - bounds,
-                                                                   Random.nextInt(bounds*2) - bounds))}
+    0 to 10000 foreach { _ => GameState.blocks += new Block(
+      Position(Random.nextInt(bounds * 2) - bounds,
+               Random.nextInt(bounds * 2) - bounds,
+               Random.nextInt(bounds * 2) - bounds),
+      Position(Random.nextInt(20) + 10,
+               Random.nextInt(20) + 10,
+               Random.nextInt(20) + 10),
+      Color.magenta)
+    }
 
     val device = GraphicsEnvironment.getLocalGraphicsEnvironment.getDefaultScreenDevice
     setUndecorated(true)
@@ -42,96 +44,58 @@ object SwingDriver extends JFrame {
 
     setVisible(true)
 
-    addKeyListener(new KeyListener {
-      private val speed = math.Pi / 36.0
-      private val accel = .1
-
-      override def keyTyped(e: KeyEvent): Unit = {}
-
-      override def keyPressed(e: KeyEvent): Unit = {
-        e.getKeyCode match {
-          case KeyEvent.VK_CONTROL => GameState.player.speed -= accel
-          case KeyEvent.VK_SHIFT => GameState.player.speed += accel
-          case KeyEvent.VK_W => GameState.player.pitchRate = -speed
-          case KeyEvent.VK_S => GameState.player.pitchRate = speed
-          case KeyEvent.VK_A => GameState.player.rollRate = -speed
-          case KeyEvent.VK_D => GameState.player.rollRate = speed
-          case _ =>
-        }
-      }
-
-      override def keyReleased(e: KeyEvent): Unit = {
-        e.getKeyCode match {
-          case KeyEvent.VK_W => GameState.player.pitchRate = 0
-          case KeyEvent.VK_S => GameState.player.pitchRate = 0
-          case KeyEvent.VK_A => GameState.player.rollRate = 0
-          case KeyEvent.VK_D => GameState.player.rollRate = 0
-          case _ =>
-        }
-      }
-    })
+    addKeyListener(new KeyboardController)
 
     // disappear into the rendering loop
     mainLoop()
   }
 
   def mainLoop() {
-    var done = false
-    while(!done) {
+    val done = false
+    while (!done) {
       // do physics
       doPhysics()
 
       // do graphics
-      render(getBufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D])
+      render(getBufferStrategy.getDrawGraphics.asInstanceOf[Graphics2D], GameState.playerCamera)
       getBufferStrategy.show()
     }
   }
 
   def doPhysics(): Unit = {
     GameState.player.updateState()
+
+    // update camera position
+    GameState.playerCamera.position = GameState.player.position
+    GameState.playerCamera.forward = GameState.player.forward
+    GameState.playerCamera.right = GameState.player.right
   }
 
-  def render(g:Graphics2D) {
+  def render(g: Graphics2D, camera: LogarithmicCamera) {
     val screen = Toolkit.getDefaultToolkit.getScreenSize
-    val center = (screen.width/2, screen.height/2)
-    val scale = center._1.min(center._2) / math.Pi
+    val center = (screen.width / 2, screen.height / 2)
+    val scale = center._1.min(center._2) / math.Pi * 1
 
-    g.setColor(Color.BLACK)
+    g.setColor(Color.black)
     g.fillRect(0, 0, getWidth, getHeight)
 
     // Render a HUD
     g.setColor(new Color(0x0066cc))
     drawOval(g, center, (math.Pi / 2 * scale).asInstanceOf[Int])
     drawOval(g, center, (math.Pi * scale).asInstanceOf[Int])
-    g.drawString("Speed: "+GameState.player.speed, 5, 17)
+    g.drawString("Speed: " + GameState.player.speed, 5, 17)
 
-    val camera = new LogarithmicCamera(GameState.player.position,
-                                       GameState.player.forward, GameState.player.right)
+    val drew = GameState.blocks.map(_.render(g, center, camera, scale)).count(identity)
 
-//    println("\n\nRendering:")
-
-//    g.setColor(Color.RED)
-    val lod = 200
-    var drew = 0
-    for(block <- GameState.blocks) {
-      val distance = (block.position - GameState.player.position).length
-      if(distance < lod) {
-        drew += 1
-        val brightness = (Math.exp(- distance / lod * 3.5) * 255).toInt
-        g.setColor(new Color(brightness, 0, brightness))
-        block.render(g, center, camera, scale)
-      }
-    }
     g.setColor(new Color(0x0066cc))
-    g.drawString(s"Drew $drew blocks", 5, 34)
-//    GameState.blocks.foreach(_.render(g, center, camera, scale))
+    g.drawString(s"Blocks drawn: $drew", 5, 34)
   }
 
   def drawOval(g: Graphics2D, center: (Int, Int), radius: Int): Unit = {
-    g.drawOval(center._1 - radius, center._2 - radius, 2*radius, 2*radius)
+    g.drawOval(center._1 - radius, center._2 - radius, 2 * radius, 2 * radius)
   }
 
-  override def paint(g:Graphics) {
+  override def paint(g: Graphics) {
     //    g setColor Color.MAGENTA
     //    g.fillRect(0, 0, getWidth(), getHeight())
   }

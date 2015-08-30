@@ -3,7 +3,7 @@ package state
 /**
  * Represents a three dimensional vector. This is an immutable object, so all
  * methods do not change the value of the object.
- * Created by Tobin on 4/4/2014.
+ * @author Tobin Yehle
  */
 
 class Position(val x:Double, val y:Double, val z:Double) {
