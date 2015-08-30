@@ -1,7 +1,6 @@
 package ui
 
 import java.awt._
-import java.awt.event.{KeyEvent, KeyListener}
 import javax.swing._
 import controll.KeyboardController
 import state._
@@ -72,31 +71,12 @@ object SwingDriver extends JFrame {
   }
 
   def render(g: Graphics2D, camera: LogarithmicCamera) {
-    val screen = Toolkit.getDefaultToolkit.getScreenSize
-    val center = (screen.width / 2, screen.height / 2)
-    val scale = center._1.min(center._2) / math.Pi * 1
-
     g.setColor(Color.black)
     g.fillRect(0, 0, getWidth, getHeight)
 
-    // Render a HUD
-    g.setColor(new Color(0x0066cc))
-    drawOval(g, center, (math.Pi / 2 * scale).asInstanceOf[Int])
-    drawOval(g, center, (math.Pi * scale).asInstanceOf[Int])
-    g.drawString("Speed: " + GameState.player.speed, 5, 17)
+    GameState.hud.render(g, camera)
 
-    val drew = GameState.blocks.map(_.render(g, center, camera, scale)).count(identity)
-
-    g.setColor(new Color(0x0066cc))
-    g.drawString(s"Blocks drawn: $drew", 5, 34)
-  }
-
-  def drawOval(g: Graphics2D, center: (Int, Int), radius: Int): Unit = {
-    g.drawOval(center._1 - radius, center._2 - radius, 2 * radius, 2 * radius)
-  }
-
-  override def paint(g: Graphics) {
-    //    g setColor Color.MAGENTA
-    //    g.fillRect(0, 0, getWidth(), getHeight())
+    camera.resetRenderCount()
+    GameState.blocks.foreach(_.render(g, camera))
   }
 }

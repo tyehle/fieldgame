@@ -17,17 +17,14 @@ trait Renderable {
   /**
    *
    * @param g The graphics object to draw on
-   * @param center The position of the center of the screen
    * @param camera
-   * @param scale Pixels per radian
    */
-  def render(g:Graphics2D, center:(Int, Int), camera: LogarithmicCamera, scale: Double):Boolean = {
+  def render(g:Graphics2D, camera: LogarithmicCamera) = {
     camera.transformColor(location, color) match {
-      case None => false
+      case None =>
       case Some(c) =>
         g.setColor(c)
-        edges.foreach(line => camera.drawLine(g, line, center, scale))
-        true
+        edges.foreach(line => camera.drawLine(g, line))
     }
   }
 }

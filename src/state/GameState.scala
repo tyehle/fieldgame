@@ -1,8 +1,8 @@
 package state
 
-import java.awt.Color
+import java.awt.{Toolkit, Color}
 
-import ui.{Fog, LogarithmicCamera}
+import ui.{CircleHud, Fog, LogarithmicCamera}
 
 import collection.mutable.ListBuffer
 import scala.collection.mutable
@@ -19,7 +19,11 @@ object GameState {
                           Position(0, 0, 1), Position(1, 0, 0), // orientation
                           1.0, // speed
                           0, 0, 0) // rotation speed
+  private val screen = Toolkit.getDefaultToolkit.getScreenSize
   val playerCamera = new LogarithmicCamera(player.position, player.forward, player.right,
-                                           new Fog(200, Color.black))
+                                           medium = new Fog(200, Color.black),
+                                           center = (screen.width / 2, screen.height / 2),
+                                           scale = screen.width.min(screen.height) / math.Pi * 1)
+  val hud = new CircleHud()
 }
 
