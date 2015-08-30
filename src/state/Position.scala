@@ -79,8 +79,9 @@ class Position(val x:Double, val y:Double, val z:Double) {
 
   // TODO: check this function
   def wrap(max: Position): Position = {
+    @inline def mod(a:Double, b:Double) = (a%b + b) % b
     if(x < 0 || x > max.x || y < 0 || y > max.y || z < 0 || z > max.z)
-      new Position(x % max.x, y % max.y, z % max.z)
+      new Position(mod(x,max.x), mod(y,max.y), mod(z,max.z))
     else
       this
   }

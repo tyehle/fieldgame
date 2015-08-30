@@ -132,4 +132,14 @@ class PositionSpec extends FlatSpec with Matchers {
     hash should not be Position(0,2,5).##
     hash should not be Position(2,2,5).##
   }
+
+  it should "around when placed out of bounds" in {
+    val bounds = Position(10,11,12)
+
+    Position(1,2,5).wrap(bounds) should be(Position(1,2,5))
+
+    Position(-1,2,5).wrap(bounds) should be(Position(9,2,5))
+    Position(13,2,5).wrap(bounds) should be(Position(3,2,5))
+    Position(-5,55,-70).wrap(bounds) should be(Position(5,0,2))
+  }
 }
