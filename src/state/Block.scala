@@ -13,10 +13,8 @@ class Block(var location:Position, var size:Position, val color: Color) extends 
   def isLethal: Boolean = true
 
   def contains(point: Position): Boolean = {
-    val relativePosition = location - point
-    (relativePosition + size).toSeq.zip(relativePosition.toSeq).forall {
-      case (a, b) => a.signum != b.signum
-    }
+    point.x >= location.x && point.y >= location.y && point.z >= location.z &&
+      point.x <= (location.x + size.x) && point.y <= (location.y + size.y) && point.z <= (location.z + size.z)
   }
 
   def edges: Set[Line] = {

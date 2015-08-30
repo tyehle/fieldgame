@@ -22,6 +22,7 @@ class Player(var position: Position,
     roll(rollRate * elapsed)
     yaw(yawRate * elapsed)
     position += forward * (speed * elapsed)
+    position = position.wrap(GameState.bounds)
   }
 
   def pitch(theta: Double): Unit = {

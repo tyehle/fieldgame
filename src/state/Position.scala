@@ -34,6 +34,8 @@ class Position(val x:Double, val y:Double, val z:Double) {
    */
   def length = mag
 
+  def volume = x*y*z
+
   /**
    * Scales this vector by the given scalar
    */
@@ -43,6 +45,8 @@ class Position(val x:Double, val y:Double, val z:Double) {
    * Scales this vector by the given scalar
    */
   def *(a: Double) = scale(a)
+
+  def /(a: Double) = scale(1/a)
 
   def component(x:Boolean, y:Boolean, z:Boolean) = {
     Position(if(x) this.x else 0, if(y) this.y else 0, if(z) this.z else 0)
@@ -71,6 +75,13 @@ class Position(val x:Double, val y:Double, val z:Double) {
     val q = new Quaternion(math.cos(theta / 2), axis.normalized * math.sin(theta / 2))
     val p = new Quaternion(0, this)
     (q*p*q.inverse).imaginaryComponent
+  }
+
+  def wrap(max: Position): Position = {
+    if(x < 0 || x > max.x || y < 0 || y > max.y || z < 0 || z > max.z)
+      new Position(x % max.x, y % max.y, z % max.z)
+    else
+      this
   }
 
   /**
