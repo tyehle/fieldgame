@@ -2,8 +2,8 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fieldgame-sbt.iml" filepath="$PROJECT_DIR$/.idea/modules/fieldgame-sbt.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fieldgame-sbt-build.iml" filepath="$PROJECT_DIR$/.idea/modules/fieldgame-sbt-build.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fieldgame.iml" filepath="$PROJECT_DIR$/.idea/modules/fieldgame.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/fieldgame-build.iml" filepath="$PROJECT_DIR$/.idea/modules/fieldgame-build.iml" />
     </modules>
   </component>
 </project>
