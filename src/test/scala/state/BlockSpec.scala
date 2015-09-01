@@ -1,9 +1,8 @@
-package test.state
+package state
 
 import java.awt.Color
 
 import org.scalatest.{Matchers, FlatSpec}
-import state.{Line, GameState, Position, Block}
 
 /**
  * @author Tobin Yehle
@@ -11,8 +10,8 @@ import state.{Line, GameState, Position, Block}
 class BlockSpec extends FlatSpec with Matchers {
   val unitBlock = new Block(Position.zero, Position(1,1,1), Color.magenta)
 
-  "A block" should "be lethal" in {
-    unitBlock.isLethal should be (true)
+  "A block" should "be non-lethal" in {
+    unitBlock.isLethal should be (false)
   }
 
   it should "know when a point is inside it" in {

@@ -1,5 +1,5 @@
 syntax: glob
 
-out/*
-lib/*
+project/target/*
+target/*
 .idea/workspace.xml

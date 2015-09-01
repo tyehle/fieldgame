@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Class-Path: scala-library.jar scala-actors-2.11.0.jar scala-swing_2.11
- -1.0.1.jar
-Main-Class: ui.GameWindow
-
