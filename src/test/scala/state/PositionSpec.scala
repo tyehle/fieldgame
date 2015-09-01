@@ -1,7 +1,6 @@
-package test.state
+package state
 
 import org.scalatest.{FlatSpec, Matchers}
-import state.Position
 
 /**
  * 2/27/2015

@@ -1,7 +1,6 @@
-package test.state
+package state
 
 import org.scalatest.{Matchers, FlatSpec}
-import state.{Position, Quaternion}
 
 /**
  * @author Tobin Yehle
