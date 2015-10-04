@@ -45,8 +45,10 @@ object GameState {
     val position = Position(Random.nextInt((GameState.bounds.x - size.x).toInt),
                             Random.nextInt((GameState.bounds.y - size.y).toInt),
                             Random.nextInt((GameState.bounds.z - size.z).toInt))
-    val speed = Random.nextDouble()
-    new Block(position, size, Color.magenta)
+    val velocity = Position(Random.nextDouble()*4e-8 - 2e-8,
+                            Random.nextDouble()*4e-8 - 2e-8,
+                            Random.nextDouble()*4e-8 - 2e-8)
+    new Block(position, size, velocity, Color.magenta)
   }
 }
 
