@@ -1,4 +1,4 @@
-name := "fieldgame-sbt"
+name := "fieldgame"
 
 version := "1.0"
 

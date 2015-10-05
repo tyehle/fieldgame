@@ -17,7 +17,7 @@ trait Renderable {
    * @param g The graphics object to draw on
    * @param camera
    */
-  def render(g:Graphics2D, camera: LogarithmicCamera) = {
+  def render(g:Graphics2D, camera: Camera) = {
     camera.transformColor(location, color) match {
       case None =>
       case Some(c) => edges.foreach(line => camera.drawLine(g, line, c))

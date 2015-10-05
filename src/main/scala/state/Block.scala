@@ -7,7 +7,7 @@ package state
 
 import java.awt.{Graphics2D, Color}
 
-import ui.{LogarithmicCamera, Renderable}
+import ui.{Camera, LogarithmicCamera, Renderable}
 
 class Block(var location:Position, var size:Position, val color: Color) extends Renderable {
   val isLethal: Boolean = false
@@ -45,7 +45,7 @@ class Block(var location:Position, var size:Position, val color: Color) extends 
     offsets.toSet map { offset:Position => Image(this, offset) }
   }
 
-  override def render(g: Graphics2D, camera: LogarithmicCamera) = {
+  override def render(g: Graphics2D, camera: Camera) = {
     super.render(g, camera)
     images.foreach(_.render(g, camera))
   }

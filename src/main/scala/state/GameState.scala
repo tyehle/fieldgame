@@ -34,7 +34,7 @@ object GameState {
                                            center = (screen.width / 2, screen.height / 2),
                                            initialFov = math.Pi)
 
-  val hud = new CircleHud()
+  val hud = new CircleHud(playerCamera)
 
   val goal:Goal = new ClearGoal(blocks.length)
 
