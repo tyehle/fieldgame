@@ -15,37 +15,53 @@ import scala.util.Random
  * @author Tobin Yehle
  */
 object GameState {
+  /** The size of the world */
   val bounds = new Position(200, 200, 200)
 
   private val targetDensity = 5e-6
-  val blocks:mutable.Buffer[Block] = ListBuffer.fill((targetDensity*GameState.bounds.volume).toInt)(generateBlock)
+  /** The list of blocks in the world */
+  val blocks:mutable.Buffer[Block] = ListBuffer.fill((targetDensity*GameState.bounds.volume).toInt)(generateBlock())
   blocks.foreach(_.edges) // force computation of the edges
   blocks.foreach(_.images) // force computation of the images
 
+  /** The player */
   val player = new Player(bounds / 2, // position
                           Position(-1, 1, 1).normalized, Position(1, 0, 1).normalized, // orientation
                           5e-8, // speed
                           0, 0, 0) // rotation speed
 
-  val viewDistance = 200 // should be less than bounds
+  /**
+   * The farthest away a block is visible. If this is greater than the bounds of the world, then blocks that should be
+   * rendered will not be.
+   */
+  val viewDistance = 200
   private val screen = Toolkit.getDefaultToolkit.getScreenSize
+  /** A camera that follows the player */
   val playerCamera = new LogarithmicCamera(player.location, player.forward, player.right,
                                            medium = new Fog(viewDistance, Color.black),
                                            center = (screen.width / 2, screen.height / 2),
                                            initialFov = math.Pi)
 
+  /** The hud for the player */
   val hud = new CircleHud(playerCamera)
 
-  val goal:Goal = new ClearGoal(blocks.length)
+  /** The goal of the game. When this goal is achieved the game is over. */
+  val goal:Goal = new ClearGoal()
 
-  def generateBlock = {
-    val size = Position(Random.nextInt(20) + 10,
-                        Random.nextInt(20) + 10,
-                        Random.nextInt(20) + 10)
+  /**
+   * Generates a random block within the given set of parameters.
+   * @param sizeLimits (smallest, biggest) size of all dimensions of the generated box
+   * @return The new random box
+   */
+  def generateBlock(sizeLimits:(Int, Int) = (10, 30)) = {
+    // generate a size within the given limits
+    val size = Position(Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1,
+                        Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1,
+                        Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1)
+    // generate a random position in bounds
     val position = Position(Random.nextInt((GameState.bounds.x - size.x).toInt),
                             Random.nextInt((GameState.bounds.y - size.y).toInt),
                             Random.nextInt((GameState.bounds.z - size.z).toInt))
-    val speed = Random.nextDouble()
     new Block(position, size, Color.magenta)
   }
 }

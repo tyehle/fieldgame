@@ -51,9 +51,9 @@ object PhysicsRenderLoop extends Runnable {
   }
 
   /**
-   * Renders the
-   * @param g
-   * @param camera
+   * Renders a frame onto a graphics object from the point of view of the given camera.
+   * @param g The graphics to render onto
+   * @param camera The camera to use during the rendering
    */
   def render(g: Graphics2D, camera: Camera) {
     g.setColor(Color.black)

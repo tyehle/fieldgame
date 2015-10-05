@@ -1,14 +1,13 @@
 package state
 
-/**
- *
- * @author Tobin Yehle
- */
-
 import java.awt.{Graphics2D, Color}
 
-import ui.{Camera, LogarithmicCamera, Renderable}
+import ui.{Camera, Renderable}
 
+/**
+ * Represents a block in the game world.
+ * @author Tobin Yehle
+ */
 class Block(var location:Position, var size:Position, val color: Color) extends Renderable {
   val isLethal: Boolean = false
 
@@ -19,6 +18,7 @@ class Block(var location:Position, var size:Position, val color: Color) extends 
       point.x <= (location.x + size.x) && point.y <= (location.y + size.y) && point.z <= (location.z + size.z)
   }
 
+  /** The wireframe of this box. The edges of this box at any time will be a translation of these edges. */
   private val mesh: Set[Line] = {
     Set((false, false, false),
         (true, true, false),
@@ -32,8 +32,10 @@ class Block(var location:Position, var size:Position, val color: Color) extends 
             Line(start, start + size.component(x=false, y=false, z=true)*(if(z) -1 else 1)))
     }
   }
+  /** The edges that define this box at this time */
   def edges: Set[Line] = mesh.map(_.offset(location))
-  
+
+  /** The images of this block that appear outside the bounds of the world. */
   val images: Set[Image] = {
     val offsets = (-1 to 1) flatMap (x => (-1 to 1) flatMap (y => (-1 to 1) collect
       {
@@ -45,6 +47,11 @@ class Block(var location:Position, var size:Position, val color: Color) extends 
     offsets.toSet map { offset:Position => Image(this, offset) }
   }
 
+  /**
+   * Renders this block on the given graphics object.
+   * @param g The graphics object to draw on
+   * @param camera The camera to use during rendering
+   */
   override def render(g: Graphics2D, camera: Camera) = {
     super.render(g, camera)
     images.foreach(_.render(g, camera))

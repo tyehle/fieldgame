@@ -3,7 +3,8 @@ package state
 /**
  * @author Tobin Yehle
  */
-class ClearGoal(initialNumber: Int) extends Goal {
+class ClearGoal extends Goal {
+  private val initialNumber = GameState.blocks.length
 
   private val maxSpeed = 1.5e-7
   private val minSpeed = 5e-8
