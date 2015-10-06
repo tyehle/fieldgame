@@ -8,14 +8,19 @@ import ui.{Camera, Renderable}
  * Represents a block in the game world.
  * @author Tobin Yehle
  */
-class Block(var location:Position, var size:Position, val color: Color) extends Renderable {
+
+class Block(var location:Position, var size:Position, var velocity:Position, val color: Color) extends Renderable {
   val isLethal: Boolean = false
 
-  def updateState(elapsed: Long) = {  }
+  def updateState(elapsed: Long) = {
+    location += velocity * elapsed
+    location = location.wrap(GameState.bounds)
+  }
 
   def contains(point: Position): Boolean = {
-    point.x >= location.x && point.y >= location.y && point.z >= location.z &&
-      point.x <= (location.x + size.x) && point.y <= (location.y + size.y) && point.z <= (location.z + size.z)
+    (point.x >= location.x && point.x <= (location.x + size.x) || point.x <= (location.x + size.x - GameState.bounds.x)) &&
+    (point.y >= location.y && point.y <= (location.y + size.y) || point.y <= (location.y + size.y - GameState.bounds.y)) &&
+    (point.z >= location.z && point.z <= (location.z + size.z) || point.z <= (location.z + size.z - GameState.bounds.z))
   }
 
   /** The wireframe of this box. The edges of this box at any time will be a translation of these edges. */

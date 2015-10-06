@@ -8,7 +8,7 @@ import org.scalatest.{Matchers, FlatSpec}
  * @author Tobin Yehle
  */
 class BlockSpec extends FlatSpec with Matchers {
-  val unitBlock = new Block(Position.zero, Position(1,1,1), Color.magenta)
+  val unitBlock = new Block(Position.zero, Position(1,1,1), Position.zero, Color.magenta)
 
   "A block" should "be non-lethal" in {
     unitBlock.isLethal should be (false)
@@ -19,7 +19,7 @@ class BlockSpec extends FlatSpec with Matchers {
     unitBlock.contains(Position(1,1,1)) should be (true)
     unitBlock.contains(Position(.5, .5, 2)) should be (false)
 
-    val offsetBlock = new Block(Position(-3, 5, 7), Position(1,1,1), Color.magenta)
+    val offsetBlock = new Block(Position(-3, 5, 7), Position(1,1,1), Position.zero, Color.magenta)
     offsetBlock.contains(Position.zero) should be (false)
     offsetBlock.contains(Position(-2, 6, 8)) should be (true)
     offsetBlock.contains(Position(-2.5, 6.5, 7.5)) should be (false)
@@ -43,7 +43,7 @@ class BlockSpec extends FlatSpec with Matchers {
   it should "produce a set of images" in {
     val bounds = GameState.bounds
     val location = Position(100, 40, 20)
-    val block = new Block(location, Position(10, 10, 10), Color.magenta)
+    val block = new Block(location, Position(10, 10, 10), Position.zero, Color.magenta)
 
     val offsets = Seq(Position(bounds.x,0,0),
                       Position(0,bounds.y,0),
