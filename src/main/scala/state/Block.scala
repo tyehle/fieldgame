@@ -10,13 +10,23 @@ import ui.{Camera, Renderable}
  */
 
 class Block(var location:Position, var size:Position, var velocity:Position, val color: Color) extends Renderable {
+  /** If the player should be killed if he flies through this block */
   val isLethal: Boolean = false
 
+  /**
+   * Updates the state of this box after some time has passed.
+   * @param elapsed The time since this method was lased called in nanoseconds
+   */
   def updateState(elapsed: Long) = {
     location += velocity * elapsed
     location = location.wrap(GameState.bounds)
   }
 
+  /**
+   * Checks if a point is contained in the block. A point is considered inside even if it is on the boundary.
+   * @param point The point to check
+   * @return If the given point is in this block
+   */
   def contains(point: Position): Boolean = {
     (point.x >= location.x && point.x <= (location.x + size.x) || point.x <= (location.x + size.x - GameState.bounds.x)) &&
     (point.y >= location.y && point.y <= (location.y + size.y) || point.y <= (location.y + size.y - GameState.bounds.y)) &&
