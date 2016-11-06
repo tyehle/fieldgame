@@ -3,4 +3,4 @@ syntax: glob
 project/target/*
 target/*
 out/*
-.idea/workspace.xml
+.idea/*
