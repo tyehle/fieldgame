@@ -2,7 +2,8 @@ package ui
 
 import java.awt._
 import javax.swing._
-import controll.{PhysicsRenderLoop, KeyboardController}
+
+import controll.{KeyboardController, PhysicsRenderLoop}
 
 /**
  *
@@ -26,6 +27,7 @@ object GameWindow extends JFrame {
     println("Fullscreen Required: " + getBufferStrategy.getCapabilities.isFullScreenRequired)
 
     setVisible(true)
+    println(s"Window size: (${getSize.width}, ${getSize.height})")
 
     addKeyListener(new KeyboardController)
 

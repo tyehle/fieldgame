@@ -1,8 +1,8 @@
 package state
 
-import java.awt.{Toolkit, Color}
+import java.awt.{Color, Toolkit}
 
-import ui.{CircleHud, Fog, LogarithmicCamera}
+import ui.{CircleHud, Fog, GameWindow, LogarithmicCamera}
 
 import collection.mutable.ListBuffer
 import scala.collection.mutable
@@ -35,7 +35,7 @@ object GameState {
    * rendered will not be.
    */
   val viewDistance = 200
-  private val screen = Toolkit.getDefaultToolkit.getScreenSize
+  private val screen = GameWindow.getSize
   /** A camera that follows the player */
   val playerCamera = new LogarithmicCamera(player.location, player.forward, player.right,
                                            medium = new Fog(viewDistance, Color.black),
