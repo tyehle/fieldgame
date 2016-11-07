@@ -1,8 +1,10 @@
 package state
 
-import java.awt.{Graphics2D, Color}
+import java.awt.{Color, Graphics2D}
 
 import ui.{Camera, Renderable}
+
+import scala.util.Random
 
 /**
  * Represents a block in the game world.
@@ -70,5 +72,27 @@ class Block(var location:Position, var size:Position, var velocity:Position, val
   override def render(g: Graphics2D, camera: Camera) = {
     super.render(g, camera)
     images.foreach(_.render(g, camera))
+  }
+}
+
+object Block {
+  /**
+   * Generates a random block within the given set of parameters.
+   * @param sizeLimits (smallest, biggest) size of all dimensions of the generated box
+   * @return The new random box
+   */
+  def apply(sizeLimits:(Int, Int) = (10, 30)) = {
+    // generate a size within the given limits
+    val size = Position(Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1,
+                        Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1,
+                        Random.nextInt(sizeLimits._2 - sizeLimits._1) + sizeLimits._1)
+    // generate a random position in bounds
+    val position = Position(Random.nextInt((GameState.bounds.x - size.x).toInt),
+                            Random.nextInt((GameState.bounds.y - size.y).toInt),
+                            Random.nextInt((GameState.bounds.z - size.z).toInt))
+    val velocity = Position(Random.nextDouble()*4e-8 - 2e-8,
+                            Random.nextDouble()*4e-8 - 2e-8,
+                            Random.nextDouble()*4e-8 - 2e-8)
+    new Block(position, size, velocity, Color.magenta)
   }
 }

@@ -5,9 +5,12 @@ import scala.collection.mutable.ListBuffer
 /**
  * @author Tobin Yehle
  */
-class ClearGoal extends Goal {
+class PoisonGoal extends Goal {
   private val targetDensity = 5e-6
-  private val initialNumber = (targetDensity*GameState.bounds.volume).toInt
+  private val poisonRatio = 1/10.0
+  private val numBlocks = targetDensity*GameState.bounds.volume
+
+  private val initialNumber = (numBlocks * (1-poisonRatio)).toInt
   private var blocksRemaining = initialNumber
 
   private val maxSpeed = 1.5e-7
@@ -16,11 +19,13 @@ class ClearGoal extends Goal {
   private val minFov = math.Pi / 4
   private val maxFov = math.Pi * 2
 
+  private val sizeLimits = (10, 30)
+
   override def completed: Boolean = blocksRemaining == 0
 
   override def initializeBlocks: mutable.Buffer[Block] = {
-    val sizeLimits = (10, 30)
-    val blocks = ListBuffer.fill((targetDensity*GameState.bounds.volume).toInt)(Block(sizeLimits))
+    val blocks = ListBuffer.fill((numBlocks * (1-poisonRatio)).toInt)(Block(sizeLimits))
+    blocks ++= ListBuffer.fill((numBlocks * poisonRatio).toInt)(PoisonBlock(sizeLimits))
     blocks.foreach(_.edges) // force computation of the edges
     blocks.foreach(_.images) // force computation of the images
     blocks
@@ -32,7 +37,12 @@ class ClearGoal extends Goal {
     GameState.playerCamera.setFov(minFov + (maxFov - minFov)*howDone)
   }
 
-  override def blockDestroyed(block: Block) = blocksRemaining -= 1
+  override def blockDestroyed(block: Block) = block match {
+    case p: PoisonBlock =>
+      GameState.blocks.append(PoisonBlock(sizeLimits), PoisonBlock(sizeLimits), Block(sizeLimits), Block(sizeLimits))
+      blocksRemaining += 2
+    case b: Block => blocksRemaining -= 1
+  }
 
-  override def message = s"Blocks remaining: ${GameState.blocks.length}"
+  override def message = s"Blocks remaining: $blocksRemaining"
 }

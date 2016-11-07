@@ -50,7 +50,7 @@ class Player(var location: Position,
 
   private def removeBlocks() = {
     val toRemove = GameState.blocks.indices.filter(i => GameState.blocks(i).contains(location)).sorted
-    toRemove.indices.map(i => toRemove(i) + i).foreach(GameState.blocks.remove) // Relies on foreach going in order
+    GameState.removeBlocks(toRemove)
   }
 
   override def toString: String = {
