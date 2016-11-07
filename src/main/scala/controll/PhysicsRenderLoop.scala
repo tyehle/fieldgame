@@ -11,6 +11,8 @@ import ui.{Camera, GameWindow, LogarithmicCamera}
  */
 object PhysicsRenderLoop extends Runnable {
 
+  val minLoopTime = (1e9/30).toLong
+
   /**
    * Loops game updates until the game goal has been achieved. When the goal has been reached, the game window is
    * disposed, and the program will shut down.
@@ -28,6 +30,9 @@ object PhysicsRenderLoop extends Runnable {
       val buffer = GameWindow.getBufferStrategy
       render(buffer.getDrawGraphics.asInstanceOf[Graphics2D], GameState.playerCamera)
       buffer.show()
+
+      // idle if loops are too short
+      while(System.nanoTime() - loopTime < minLoopTime) {}
     }
 
     GameWindow.setVisible(false)
