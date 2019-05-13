@@ -37,11 +37,11 @@ class PoisonGoal extends Goal {
     GameState.playerCamera.setFov(minFov + (maxFov - minFov)*howDone)
   }
 
-  override def blockDestroyed(block: Block) = block match {
-    case p: PoisonBlock =>
-      GameState.blocks.append(PoisonBlock(sizeLimits), PoisonBlock(sizeLimits), Block(sizeLimits), Block(sizeLimits))
+  override def blockDestroyed(block: Block): Unit = block match {
+    case _:PoisonBlock =>
+      GameState.blocks.append(PoisonBlock(sizeLimits), Block(sizeLimits), Block(sizeLimits))
       blocksRemaining += 2
-    case b: Block => blocksRemaining -= 1
+    case _:Block => blocksRemaining -= 1
   }
 
   override def message = s"Blocks remaining: $blocksRemaining"
