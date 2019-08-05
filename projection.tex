@@ -1,0 +1,234 @@
+\documentclass[twoside,12pt]{article}
+\usepackage{moreverb}
+\usepackage{amsmath}
+\usepackage{tikz}
+\usepackage{tikz-3dplot}
+\usepackage{asymptote}
+\usepackage{graphicx}
+\usepackage{amsfonts}
+\usepackage{appendix}
+\usepackage[margin=1in]{geometry}
+\begin{document}
+\title{Projection}
+\author{Tobin Yehle}
+\date{August 2019}
+\maketitle
+
+\newcommand{\dotp}{\boldsymbol{\cdot}}
+
+\begin{center}
+\begin{asy}[width=0.75\textwidth]
+    settings.render=6;
+    settings.prc=false;
+    import three;
+    import graph3;
+    import grid3;
+    
+    currentprojection=orthographic(-1,-2,-4,up=-Y);
+    
+    // Styles
+    pen thickblack = black+0.75;
+    pen thinblack = black+0.25;
+    pen thingray = gray+0.33;
+    
+    // Draw Axes
+    
+    // a nearly transparent sphere to help see perspective
+    triple rin(pair t){ return expi(t.x,t.y); }
+    surface sphere=surface(rin,(-pi/2,-pi/2),(pi/2,pi/2),32,32);
+    draw(sphere,emissive(gray+opacity(0.125)));
+    
+    // R
+    draw(L=Label("$\mathbf{r}$", position=Relative(1.1), align=E), O--X, thickblack, Arrow3);
+    draw(O--(-1,0,0), p=thingray, arrow=None);
+    
+    // D
+    draw(L=Label("$\mathbf{d}$", position=Relative(1.1), align=S), O--Y, thickblack, Arrow3);
+    draw(O--(0,-1,0), p=thingray, arrow=None);
+    
+    // F
+    draw(L=Label("$\mathbf{f}$", position=Relative(1.1), align=SW), O--Z, thickblack, Arrow3);
+    
+    
+    // Draw latitude lines
+    path3 lat(real l) { return circle(Z*cos(l),sin(l),Z); }
+    //draw( lat(pi/6), thinblack );
+    //draw( lat(pi/3), thinblack );
+    //draw( lat(pi/4), thinblack );
+    draw( lat(pi/2), thinblack );
+    
+    // Draw longitude lines
+    path3 lon(real l) { return arc(O, 1, 0, 0, 90, l); }
+    for(int l=0; l < 360; l+=90) {
+      draw( lon(l), thinblack );
+    }
+    
+    
+    // p vector
+    triple P=dir((5,-3,5));
+    draw( L=Label("$\mathbf{\hat{p}}$", position=Relative(1.1), align=N), O--P, thickblack, Arrow3 );
+    
+    // alpha
+    draw( arc(O, Z, P), black );
+    draw( L=Label("$\alpha$", align=N), arc(O, 0.2*Z, 0.2*P), black );
+    
+    // theta
+    triple P_f=(0,0,P.z);
+    triple lat_r=(sqrt(1-P.z*P.z),0,P.z);
+    real theta=atan(P.y/P.x);
+    draw( P--P_f--lat_r, dashed );
+    draw( arc(P_f, P, lat_r), black );
+    draw( L=Label("$\theta$", align=E), arc(P_f, 0.2, 90, theta*180/pi, 90, 0), black );
+\end{asy}
+
+.
+
+\begin{tikzpicture}[scale=6]
+    % grid
+    \draw[gray] (0,0) circle (1);
+    % \draw[gray] (0,0) circle (1);
+    \draw[gray] (-1,0)--(1,0);
+    \draw[gray] (0,-1)--(0,1);
+    
+    % R3 basis
+    \draw[->,thick] (0,0)--(1,0) node [at end,below left] {$\mathbf{r}'$};
+    \draw[->,thick] (0,0)--(0,-1) node [at end,above right] {$\mathbf{d}'$};
+    
+    % p = (5,-3,5)
+    % alpha = 49.39 = 0.8620 rad
+    % theta = 30.96 = 0.5404 rad
+    % x = 0.4706
+    % y = 0.2823
+    \draw[->,thick] (0,0)--(0.4706,0.2823) node [at end,above] {$\mathbf{p}'$};
+    \node[below right] at (0.4706,0.2823) {$\alpha = \|\mathbf{p}'\|$};
+    \draw[-] (0.25,0) arc (0:30.96:0.25) node [midway,right] {$\theta$};
+\end{tikzpicture}
+
+.
+
+\begin{asy}[width=0.75\textwidth]
+    settings.render=6;
+    settings.prc=false;
+    import three;
+    import graph3;
+    import grid3;
+    
+    currentprojection=orthographic(-1.5,-2.5,-4,up=-Y);
+    
+    // Styles
+    pen thickblack = black+0.75;
+    pen thinblack = black+0.25;
+    pen thingray = gray+0.33;
+    
+    // Draw Axes
+    
+    // a nearly transparent sphere to help see perspective
+    triple rin(pair t){ return expi(t.x,t.y); }
+    surface sphere=surface(rin,(-pi/2,-pi/2),(pi/2,pi/2),32,32);
+    draw(sphere,emissive(gray+opacity(0.125)));
+    
+    // R
+    draw(L=Label("$\mathbf{r}$", position=Relative(1.1), align=SE), O--X, thickblack, Arrow3);
+    draw((-1.5,0,0)--(3.25,0,0), p=thingray, arrow=None);
+    
+    // D
+    draw(L=Label("$\mathbf{d}$", position=Relative(1.1), align=SW), O--Y, thickblack, Arrow3);
+    draw((0,-2,0)--(0,1.5,0), p=thingray, arrow=None);
+    
+    // F
+    draw(L=Label("$\mathbf{f}$", position=Relative(1.1), align=SW), O--Z, thickblack, Arrow3);
+    draw(O--(0,0,3.25), p=thingray, arrow=None);
+    
+    
+    // Draw latitude lines
+    path3 lat(real l) { return circle(Z*cos(l),sin(l),Z); }
+    //draw( lat(pi/6), thinblack );
+    //draw( lat(pi/3), thinblack );
+    //draw( lat(pi/4), thinblack );
+    draw( lat(pi/2), thinblack );
+    
+    // Draw longitude lines
+    path3 lon(real l) { return arc(O, 1, 0, 0, 100, l); }
+    for(int l=0; l < 360; l+=90) {
+      draw( lon(l), thinblack );
+    }
+    draw( arc(O, 2, -10, 0, 100, 0), thinblack );
+    draw( arc(O, 3, -10, 0, 100, 0), thinblack );
+    
+    
+    // p vector
+    triple P=(2.5,-1.5,2.5);
+    triple P_hat=dir(P);
+    triple P_rf=(P.x,0,P.z);
+    triple P_r=(P.x,0,0);
+    draw( O--P_hat, black+1.25 );
+    draw( L=Label("$\mathbf{p}$", position=Relative(1.1), align=N), O--P, thickblack, Arrow3 );
+    draw( P--P_rf--O, thinblack );
+    //draw( P_rf--P_r, dashed );
+    
+    // alpha
+    draw( L=Label("$\alpha$", align=NW), arc(O, Z, P_hat), thickblack );
+    
+    // P reject f
+    triple P_rd=(P.x,P.y,0);
+    triple P_rd_hat=dir(P_rd);
+    draw( O--P_rd_hat, black+1.25 );
+    draw( L=Label("$\mathbf{P}_{/\mathbf{f}}$", position=Relative(1.1), align=E), O--P_rd, thickblack, Arrow3 );
+    draw( P_rd--P_r, thinblack );
+    draw( P--P_rd, dashed );
+    draw( P_hat--(P_hat.x,P_hat.y,0)--(P_hat.x,0,0), dashed );
+    
+    // theta
+    draw( L=Label("$\theta$", align=E), arc(O, X, P_rd_hat), thickblack );
+    triple P_hat_f=(0,0,P_hat.z);
+    triple lat_r=(sqrt(1-P_hat.z*P_hat.z),0,P_hat.z);
+    draw( P_hat--P_hat_f--lat_r, dashed );
+    draw( arc(P_hat_f, P_hat, lat_r), black );
+    
+    // P dot r
+    draw( L=Label("$\mathbf{p}\cdot\mathbf{r}$", position=Relative(1.1), align=SE), O--P_r, thickblack, Arrow3 );
+    
+    // P dot d
+    triple P_d=(0,P.y,0);
+    draw( L=Label("$\mathbf{p}\cdot\mathbf{d}$", position=Relative(1.1), align=NW), O--P_d, thickblack, Arrow3 );
+    draw( P_rd--P_d, dashed );
+\end{asy}
+\end{center}
+
+
+The easiest component of the projection to find is the polar coordinate radius, or latitude, $\alpha$.
+
+\[
+\alpha = \arccos \left( \frac{\mathbf{p}}{\|\mathbf{p}\|}  \dotp \mathbf{f} \right)
+\]
+
+We will use the rejection of the forward vector $\mathbf{f}$ from $\mathbf{p}$ to find the equatorial rotation of the projected point. This rejection vector is equivalent to the projection of $\mathbf{p}$ onto the plane orthogonal to $\mathbf{f}$.
+
+\[
+\mathbf{p}_{/\mathbf{f}} = \mathbf{p} - \mathbf{f} ( \mathbf{p} \dotp \mathbf{f} )
+\]
+
+The angle, $\theta$, between the right vector, $\mathbf{r}$, and $\mathbf{p}_{/\mathbf{f}}$ is the angle component of the of the polar coordinate projection.
+
+
+The cartesian coordinates in $\mathbb{R}^2$ can then be expressed in terms of $\alpha$ and $\theta$
+
+\[ x = \alpha \cos ( \theta ) \]
+\[ y = \alpha \sin ( \theta ) \]
+
+The trig operations on $\theta$ can be reduced because we have access to the lengths of the sides of a triangle containing $\theta$.
+
+\[ \cos ( \theta ) = \frac{ \mathbf{p} \dotp \mathbf{r} }{ \| \mathbf{p}_{/\mathbf{f}} \| } \]
+\[ \sin ( \theta ) = \frac{ \mathbf{p} \dotp \mathbf{d} }{ \| \mathbf{p}_{/\mathbf{f}} \| } \]
+
+The down vector, $\mathbf{d}$, is not stored, but can be found with a cross product.
+
+\[ \mathbf{d} = \mathbf{f} \times \mathbf{r} \]
+
+Putting all these pieces together gives the cartesian coodinates of the projected point.
+
+\[ x = \alpha \; \frac{ \mathbf{p} \dotp \mathbf{r} }{ \| \mathbf{p}_{/\mathbf{f}} \| } \]
+
+\[ y = \alpha \; \frac{ \mathbf{p} \dotp ( \mathbf{f} \times \mathbf{r} ) }{ \| \mathbf{p}_{/\mathbf{f}} \| } \]
+
+\end{document}
