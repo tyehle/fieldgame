@@ -12,7 +12,7 @@ import scala.util.Random
  */
 
 class Block(var location:Position, var size:Position, var velocity:Position, val color: Color) extends Renderable {
-  /** If the player should be killed if he flies through this block */
+  /** If the player should be killed if they fly through this block */
   val isLethal: Boolean = false
 
   /**
