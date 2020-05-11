@@ -18,7 +18,8 @@
 
 \begin{center}
 \begin{asy}[width=0.75\textwidth]
-    settings.render=6;
+    settings.render=10;
+    // settings.outformat="png";
     settings.prc=false;
     import three;
     import graph3;
@@ -36,7 +37,7 @@
     // a nearly transparent sphere to help see perspective
     triple rin(pair t){ return expi(t.x,t.y); }
     surface sphere=surface(rin,(-pi/2,-pi/2),(pi/2,pi/2),32,32);
-    draw(sphere,emissive(gray+opacity(0.125)));
+    draw(sphere, emissive(gray+opacity(0.125)));
     
     // R
     draw(L=Label("$\mathbf{r}$", position=Relative(1.1), align=E), O--X, thickblack, Arrow3);
@@ -107,13 +108,15 @@
 .
 
 \begin{asy}[width=0.75\textwidth]
-    settings.render=6;
+    settings.render=10;
+    // settings.outformat="png";
     settings.prc=false;
     import three;
     import graph3;
     import grid3;
     
-    currentprojection=orthographic(-1.5,-2.5,-4,up=-Y);
+    //currentprojection=orthographic(-1.5,-2.5,-4,up=-Y);
+    currentprojection=orthographic(-1.5,-2,-4,up=-Y);
     
     // Styles
     pen thickblack = black+0.75;
@@ -121,12 +124,6 @@
     pen thingray = gray+0.33;
     
     // Draw Axes
-    
-    // a nearly transparent sphere to help see perspective
-    triple rin(pair t){ return expi(t.x,t.y); }
-    surface sphere=surface(rin,(-pi/2,-pi/2),(pi/2,pi/2),32,32);
-    draw(sphere,emissive(gray+opacity(0.125)));
-    
     // R
     draw(L=Label("$\mathbf{r}$", position=Relative(1.1), align=SE), O--X, thickblack, Arrow3);
     draw((-1.5,0,0)--(3.25,0,0), p=thingray, arrow=None);
@@ -149,11 +146,16 @@
     
     // Draw longitude lines
     path3 lon(real l) { return arc(O, 1, 0, 0, 100, l); }
-    for(int l=0; l < 360; l+=90) {
+    for(int l=0; l < 360; l+=180) {
       draw( lon(l), thinblack );
     }
-    draw( arc(O, 2, -10, 0, 100, 0), thinblack );
-    draw( arc(O, 3, -10, 0, 100, 0), thinblack );
+    //draw( arc(O, 2, -10, 0, 100, 0), thinblack );
+    //draw( arc(O, 3, -10, 0, 100, 0), thinblack );
+    
+    // a nearly transparent sphere to help see perspective
+    triple rin(pair t){ return expi(t.x,t.y); }
+    surface sphere=surface(rin,(-pi/2,-pi/2),(pi/2,pi/2),32,32);
+    draw(sphere,emissive(gray+opacity(0.125)));
     
     
     // p vector
@@ -161,29 +163,35 @@
     triple P_hat=dir(P);
     triple P_rf=(P.x,0,P.z);
     triple P_r=(P.x,0,0);
+    triple P_f=(0,0,P.z);
     draw( O--P_hat, black+1.25 );
     draw( L=Label("$\mathbf{p}$", position=Relative(1.1), align=N), O--P, thickblack, Arrow3 );
-    draw( P--P_rf--O, thinblack );
+    
+    //draw( P--P_rf--O, thinblack );
+    // or
+    draw( P--P_rf, thinblack );
+    draw( P_r--P_rf--P_f, thinblack );
+    
     //draw( P_rf--P_r, dashed );
     
     // alpha
-    draw( L=Label("$\alpha$", align=NW), arc(O, Z, P_hat), thickblack );
+    draw( L=Label("$\alpha$", align=SE), arc(O, Z, P_hat), thickblack );
     
     // P reject f
     triple P_rd=(P.x,P.y,0);
     triple P_rd_hat=dir(P_rd);
-    draw( O--P_rd_hat, black+1.25 );
+    //draw( O--P_rd_hat, black+1.25 );
     draw( L=Label("$\mathbf{P}_{/\mathbf{f}}$", position=Relative(1.1), align=E), O--P_rd, thickblack, Arrow3 );
     draw( P_rd--P_r, thinblack );
     draw( P--P_rd, dashed );
-    draw( P_hat--(P_hat.x,P_hat.y,0)--(P_hat.x,0,0), dashed );
+    //draw( P_hat--(P_hat.x,P_hat.y,0)--(P_hat.x,0,0), dashed );
     
     // theta
     draw( L=Label("$\theta$", align=E), arc(O, X, P_rd_hat), thickblack );
     triple P_hat_f=(0,0,P_hat.z);
     triple lat_r=(sqrt(1-P_hat.z*P_hat.z),0,P_hat.z);
-    draw( P_hat--P_hat_f--lat_r, dashed );
-    draw( arc(P_hat_f, P_hat, lat_r), black );
+    //draw( P_hat--P_hat_f--lat_r, dashed );
+    //draw( arc(P_hat_f, P_hat, lat_r), black );
     
     // P dot r
     draw( L=Label("$\mathbf{p}\cdot\mathbf{r}$", position=Relative(1.1), align=SE), O--P_r, thickblack, Arrow3 );
