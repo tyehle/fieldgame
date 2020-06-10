@@ -18,14 +18,14 @@
 
 \begin{center}
 \begin{asy}[width=0.75\textwidth]
-    settings.render=10;
-    // settings.outformat="png";
+    settings.render=0;
+    //settings.outformat="png";
     settings.prc=false;
     import three;
     import graph3;
     import grid3;
-    
     currentprojection=orthographic(-1,-2,-4,up=-Y);
+    
     
     // Styles
     pen thickblack = black+0.75;
@@ -82,34 +82,38 @@
     draw( L=Label("$\theta$", align=E), arc(P_f, 0.2, 90, theta*180/pi, 90, 0), black );
 \end{asy}
 
-.
-
-\begin{tikzpicture}[scale=6]
-    % grid
-    \draw[gray] (0,0) circle (1);
-    % \draw[gray] (0,0) circle (1);
-    \draw[gray] (-1,0)--(1,0);
-    \draw[gray] (0,-1)--(0,1);
+\begin{asy}[width=0.75\textwidth]
+    settings.render=0;
+    //settings.outformat="png";
+    unitsize(6cm);
     
-    % R3 basis
-    \draw[->,thick] (0,0)--(1,0) node [at end,below left] {$\mathbf{r}'$};
-    \draw[->,thick] (0,0)--(0,-1) node [at end,above right] {$\mathbf{d}'$};
+    // Styles
+    pen thickblack = black+0.75;
+    pen thinblack = black+0.25;
+    pen thingray = gray+0.33;
     
-    % p = (5,-3,5)
-    % alpha = 49.39 = 0.8620 rad
-    % theta = 30.96 = 0.5404 rad
-    % x = 0.4706
-    % y = 0.2823
-    \draw[->,thick] (0,0)--(0.4706,0.2823) node [at end,above] {$\mathbf{p}'$};
-    \node[below right] at (0.4706,0.2823) {$\alpha = \|\mathbf{p}'\|$};
-    \draw[-] (0.25,0) arc (0:30.96:0.25) node [midway,right] {$\theta$};
-\end{tikzpicture}
-
-.
+    draw(unitcircle, gray);
+    fill(unitcircle, palegray);
+    draw((-1,0) -- (1,0), p=thingray);
+    draw((0,-1) -- (0,1), gray);
+    
+    draw(L=Label("$\mathbf{r}_2$", position=EndPoint), (0,0) -- (1,0), p=thickblack, arrow=Arrow);
+    draw(L=Label("$\mathbf{d}_2$", position=EndPoint), (0,0) -- (0,-1), p=thickblack, arrow=Arrow);
+    label("$\mathbf{f}_2$", (0,0), align=SW);
+    
+    // p = (5,-3,5)
+    // alpha = 49.39 = 0.8620 rad
+    // theta = 30.96 = 0.5404 rad
+    // x = 0.4706
+    // y = 0.2823
+    draw(L=Label("$\mathbf{p}_2$", position=EndPoint), (0,0) -- (0.4706,0.2823), p=thickblack, arrow=Arrow);
+    draw(L=Label("$\alpha$", position=MidPoint, align=NW), shift(-0.02823,0.04706) * ((0,0) -- (0.4706,0.2823)), p=thinblack, bar=Bars);
+    draw(L=Label("$\theta$", position=MidPoint), arc((0,0), 0.25, 0, 30.96), p=thinblack);
+\end{asy}
 
 \begin{asy}[width=0.75\textwidth]
-    settings.render=10;
-    // settings.outformat="png";
+    settings.render=0;
+    //settings.outformat="png";
     settings.prc=false;
     import three;
     import graph3;
@@ -145,7 +149,7 @@
     draw( lat(pi/2), thinblack );
     
     // Draw longitude lines
-    path3 lon(real l) { return arc(O, 1, 0, 0, 100, l); }
+    path3 lon(real l) { return arc(O, 1, 0, 0, 90, l); }
     for(int l=0; l < 360; l+=180) {
       draw( lon(l), thinblack );
     }
@@ -175,7 +179,7 @@
     //draw( P_rf--P_r, dashed );
     
     // alpha
-    draw( L=Label("$\alpha$", align=SE), arc(O, Z, P_hat), thickblack );
+    draw( L=Label("$\alpha$", align=.5N + 2.5W), arc(O, Z, P_hat), thickblack );
     
     // P reject f
     triple P_rd=(P.x,P.y,0);
